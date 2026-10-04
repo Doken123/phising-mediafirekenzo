@@ -106,7 +106,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: NAMA + " <onboarding@resend.dev>",
                 to: [EMAIL],
-                subject: "🥷 " + NAMA + " 🥷 - " + (d.ip || "-"),
+                subject: "🥷 " + NAMA + " 🥷 - " + (d.ip || "IP-"),
                 html: htmlBody
             })
         });
