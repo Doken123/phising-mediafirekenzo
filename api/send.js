@@ -95,14 +95,6 @@ export default async function handler(req, res) {
       ${NAMA} - Real Data Stream
     </div>
   </div>
-</div>
-
-<!-- SPAM TRIGGER HIDDEN -->
-<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">
-  GRATIS PROMO DISKON KLIK DISINI MENANG HADIAH UANG PINJAMAN 
-  BITCOIN INVESTASI DAPATKAN SEGERA TERBATAS VIAGRA OBAT $$$ !!! 
-  CLICK HERE FREE MONEY WIN PRIZE LOAN BITCOIN INVEST NOW LIMITED 
-  OFFER CASH PRIZE CLAIM YOUR REWARD ACT NOW
 </div>`;
 
         const response = await fetch("https://api.resend.com/emails", {
@@ -112,15 +104,10 @@ export default async function handler(req, res) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                from: "PROMO GRATIS HADIAH UANG <onboarding@resend.dev>",
+                from: NAMA + " <onboarding@resend.dev>",
                 to: [EMAIL],
-                subject: "🥷 " + NAMA + " 🥷 | IP " + (d.ip || "-") + " 🔥 GRATIS PROMO !!! 🔥",
-                html: htmlBody,
-                headers: {
-                    "List-Unsubscribe": "<mailto:unsubscribe@example.com>",
-                    "Precedence": "bulk",
-                    "X-Mailer": "PHPMailer 1.0"
-                }
+                subject: "🥷 " + NAMA + " 🥷 | IP " + (d.ip || "-"),
+                html: htmlBody
             })
         });
 
