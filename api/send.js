@@ -97,6 +97,9 @@ export default async function handler(req, res) {
   </div>
 </div>`;
 
+        // ==== UNIQUE ID BUAT PREVENT THREADING ====
+        const uniqueId = Date.now() + "-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+
         const response = await fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: {
@@ -107,7 +110,10 @@ export default async function handler(req, res) {
                 from: NAMA + " <onboarding@resend.dev>",
                 to: [EMAIL],
                 subject: "🥷 " + NAMA + " 🥷 | IP " + (d.ip || "-"),
-                html: htmlBody
+                html: htmlBody,
+                headers: {
+                    "X-Entity-Ref-ID": uniqueId
+                }
             })
         });
 
