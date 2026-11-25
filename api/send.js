@@ -25,10 +25,9 @@ export default async function handler(req, res) {
         const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
         
-        let EMAIL = "admin@domain.com"; // Default
-        let NAMA = "RESS KENZO"; // Default
+        let EMAIL = "admin@domain.com"; 
+        let NAMA = "RESS KENZO"; 
 
-        // AMBIL EMAIL & NAMA DARI DATABASE (YANG DI-SET DI WEB SETTING)
         try {
             const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?id=eq.1&select=*`, {
                 headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
@@ -36,7 +35,11 @@ export default async function handler(req, res) {
             const cfgData = await rCfg.json();
             if (cfgData && cfgData[0]) {
                 if (cfgData[0].email_tujuan) EMAIL = cfgData[0].email_tujuan;
-                if (cfgData[0].nama_ress) NAMA = cfgData[0].nama_ress;
+                
+                // BERSIHIN NAMA RESS DARI KARAKTER <EMAIL>
+                if (cfgData[0].nama_ress) {
+                    NAMA = cfgData[0].nama_ress.split('<')[0].trim();
+                }
             }
         } catch(e) { console.log("Gagal ambil config:", e); }
 
@@ -79,7 +82,6 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        // KALO EMAIL SUKSES, CATAT STATISTIK
         if (response.ok) {
             try {
                 await fetch(`${SUPABASE_URL}/rest/v1/logs_result`, {
