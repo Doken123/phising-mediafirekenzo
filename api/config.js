@@ -1,15 +1,21 @@
 export default async function handler(req, res) {
-    // BUKA AKSES CORS BUAT SEMUA DOMAIN (SEMENTARA)
+    // ==========================================
+    // 1. SET HEADER CORS (BIAR GA ERROR LOAD FAILED)
+    // ==========================================
     res.setHeader("Access-Control-Allow-Origin", "*"); 
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // HANDLE PREFLIGHT REQUEST DARI BROWSER
+    // ==========================================
+    // 2. HANDLE PREFLIGHT REQUEST (WAJIB BUAT POST)
+    // ==========================================
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
 
-    // URL & KEY SUPABASE LU
+    // ==========================================
+    // 3. URL & KEY SUPABASE LU
+    // ==========================================
     const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
     
@@ -70,7 +76,7 @@ export default async function handler(req, res) {
                 })
             });
             if (!r.ok) throw new Error(await r.text());
-            return res.status(200).json({ success: true, message: "SETTING KESIMPEN ANJING!" });
+            return res.status(200).json({ success: true, message: "SETTING BERHASIL DISIMPAN!" });
         } catch (e) { return res.status(500).json({ error: e.message }); }
     }
     return res.status(405).end();
