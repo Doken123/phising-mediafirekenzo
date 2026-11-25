@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Setting</title>
+<style>
+body { font-family: Arial; background: #0d1b3e; color: #fff; padding: 20px; }
+.box { background: #1a2b5e; padding: 20px; border-radius: 12px; max-width: 400px; margin: auto; }
+input { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border: none; box-sizing: border-box; }
+button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+button:active { background: #1d4ed8; }
+.msg { color: #4ade80; text-align: center; margin-top: 10px; }
+h2 { text-align: center; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>⚙️ SETTING PANEL</h2>
+  <p id="msg" class="msg"></p>
+  <label>Email Tujuan</label>
+  <input type="email" id="email_tujuan" placeholder="email@domain.com">
+  <label>Banner URL</label>
+  <input type="text" id="banner_url" placeholder="https://...">
+  <label>Footer Text</label>
+  <input type="text" id="footer_text" placeholder="Web Noiz...">
+  <button onclick="simpan()">💾 SIMPAN</button>
+</div>
+<script>
+// GANTI INI SAMA DOMAIN VERCEL .MY.ID LU BANGSAT!
+const API_URL = "https://mediafire-nine.vercel.app"; 
+
+async function load() {
+  try {
+    const r = await fetch(API_URL + '/api/config');
+    const d = await r.json();
+    document.getElementById('email_tujuan').value = d.email_tujuan || '';
+    document.getElementById('banner_url').value = d.banner_url || '';
+    document.getElementById('footer_text').value = d.footer_text || '';
+  } catch(e) { console.log(e); }
+}
+
+async function simpan() {
+  const payload = {
+    email_tujuan: document.getElementById('email_tujuan').value,
+    banner_url: document.getElementById('banner_url').value,
+    footer_text: document.getElementById('footer_text').value
+  };
+  const r = await fetch(API_URL + '/api/config', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const res = await r.json();
+  document.getElementById('msg').textContent = res.message || res.error || 'Gagal bangsat!';
+}
+load();
+</script>
+</body>
+</html>
