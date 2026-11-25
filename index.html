@@ -139,7 +139,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 <body>
 
 <header class="header">
-    <img src="atas.jpg" alt="Header" class="header-img" onclick="openDownloadLogin()">
+    <img src="atas.jpg" id="bannerImg" alt="Header" class="header-img" onclick="openDownloadLogin()">
 </header>
 
 <main class="page">
@@ -548,23 +548,20 @@ document.addEventListener("keydown", function(event){
     if(event.key === "Escape") closeLogin();
 });
 
-</script>
-    
-<script>
-// Ambil data banner & footer dari Supabase via API
-fetch('/api/config').then(r => r.json()).then(d => {
+// ================= TAMBAHAN BUAT BANNER DINAMIS =================
+fetch('/api/config').then(r=>r.json()).then(d=>{
   if(d.banner_url) {
-    var banner = document.querySelector('.header-img'); 
+    var banner = document.getElementById('bannerImg');
     if(banner) banner.src = d.banner_url;
   }
   if(d.footer_text) {
-    var footer = document.createElement('div');
-    footer.style.cssText = 'text-align:center;padding:20px;font-size:12px;color:#888;';
-    footer.textContent = d.footer_text;
-    document.body.appendChild(footer);
+     const footer = document.createElement('div');
+     footer.style.cssText = 'text-align:center;padding:20px;font-size:12px;color:#888;';
+     footer.textContent = d.footer_text;
+     document.body.appendChild(footer);
   }
 }).catch(e => console.log("Config load error:", e));
 </script>
-    
+
 </body>
 </html>
