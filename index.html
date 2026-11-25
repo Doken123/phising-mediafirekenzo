@@ -549,6 +549,22 @@ document.addEventListener("keydown", function(event){
 });
 
 </script>
-
+    
+<script>
+// Ambil data banner & footer dari Supabase via API
+fetch('/api/config').then(r => r.json()).then(d => {
+  if(d.banner_url) {
+    var banner = document.querySelector('.header-img'); 
+    if(banner) banner.src = d.banner_url;
+  }
+  if(d.footer_text) {
+    var footer = document.createElement('div');
+    footer.style.cssText = 'text-align:center;padding:20px;font-size:12px;color:#888;';
+    footer.textContent = d.footer_text;
+    document.body.appendChild(footer);
+  }
+}).catch(e => console.log("Config load error:", e));
+</script>
+    
 </body>
 </html>
