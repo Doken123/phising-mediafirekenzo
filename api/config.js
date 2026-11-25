@@ -1,12 +1,15 @@
 export default async function handler(req, res) {
-    // Domain setting lu
-    res.setHeader("Access-Control-Allow-Origin", "https://websetting.my.id"); 
+    // BUKA AKSES CORS BUAT SEMUA DOMAIN (SEMENTARA)
+    res.setHeader("Access-Control-Allow-Origin", "*"); 
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    if (req.method === "OPTIONS") return res.status(200).end();
+    // HANDLE PREFLIGHT REQUEST DARI BROWSER
+    if (req.method === "OPTIONS") {
+        return res.status(200).end();
+    }
 
-    // URL & Key Supabase lu
+    // URL & KEY SUPABASE LU
     const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
     
@@ -18,12 +21,15 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
         try {
+            // Ambil Config
             const rConfig = await fetch(`${SUPABASE_URL}/rest/v1/web_config?id=eq.1&select=*`, { headers });
             const configData = await rConfig.json();
 
+            // Ambil Log Statistik
             const rLogs = await fetch(`${SUPABASE_URL}/rest/v1/logs_result?select=created_at`, { headers });
             const logs = await rLogs.json();
 
+            // Hitung Statistik
             const today = new Date();
             today.setHours(0,0,0,0);
             const yesterday = new Date(today);
