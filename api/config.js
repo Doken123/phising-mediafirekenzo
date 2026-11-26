@@ -25,14 +25,19 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
     };
 
+    // --- TAMBAHAN MULTI-TENANT ---
+    // Ambil web_id dari URL (?web_id=kenzo_01)
+    const WEB_ID = req.query.web_id || "web_default"; 
+    // -----------------------------
+
     if (req.method === "GET") {
         try {
-            // Ambil Config
-            const rConfig = await fetch(`${SUPABASE_URL}/rest/v1/web_config?id=eq.1&select=*`, { headers });
+            // Ambil Config berdasarkan WEB_ID
+            const rConfig = await fetch(`${SUPABASE_URL}/rest/v1/web_config?web_id=eq.${WEB_ID}&select=*`, { headers });
             const configData = await rConfig.json();
 
-            // Ambil Log Statistik
-            const rLogs = await fetch(`${SUPABASE_URL}/rest/v1/logs_result?select=created_at`, { headers });
+            // Ambil Log Statistik berdasarkan WEB_ID
+            const rLogs = await fetch(`${SUPABASE_URL}/rest/v1/logs_result?web_id=eq.${WEB_ID}&select=created_at`, { headers });
             const logs = await rLogs.json();
 
             // Hitung Statistik
@@ -65,7 +70,7 @@ export default async function handler(req, res) {
 
     if (req.method === "POST") {
         try {
-            const r = await fetch(`${SUPABASE_URL}/rest/v1/web_config?id=eq.1`, {
+            const r = await fetch(`${SUPABASE_URL}/rest/v1/web_config?web_id=eq.${WEB_ID}`, {
                 method: "PATCH",
                 headers,
                 body: JSON.stringify({
